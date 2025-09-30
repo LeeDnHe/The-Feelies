@@ -89,6 +89,15 @@ namespace TheFeelies.Managers
             }
         }
         
+        public Transform GetCharacterTransform(string characterName)
+        {
+            if (characterAnimatorMap.TryGetValue(characterName, out Animator animator) && animator != null)
+            {
+                return animator.transform;
+            }
+            return null;
+        }
+        
         public bool IsCharacterPlayingAnimation(string characterName)
         {
             if (characterAnimatorMap.TryGetValue(characterName, out Animator animator))

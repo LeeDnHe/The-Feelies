@@ -58,6 +58,21 @@ MonoBehaviour:
           requiredButtonText: "\uB2E4\uC74C"
           cutDuration: 3
           waitForPlayerInput: 0
+        - cutID: cut_2
+          cutName: New Cut
+          description: "\uC0C8\uB85C\uC6B4 \uCEF7"
+          dialogueText: 
+          ttsAudio: {fileID: 0}
+          characterAnimations: []
+          characterNames: []
+          playerPositionType: 0
+          spawnPoint: {fileID: 0}
+          customPosition: {x: 0, y: 0, z: 0}
+          customRotation: {x: 0, y: 0, z: 0, w: 1}
+          startCondition: 0
+          requiredButtonText: "\uB2E4\uC74C"
+          cutDuration: 3
+          waitForPlayerInput: 0
         isSavePoint: 1
         backgroundScene: 
       - actID: act_1
@@ -98,4 +113,14 @@ MonoBehaviour:
         cuts: []
         isSavePoint: 1
         backgroundScene: 
+      characterType: 0
+    - chapterID: chapter_2
+      chapterName: New Chapter
+      description: "\uC0C8\uB85C\uC6B4 \uCC55\uD130"
+      acts: []
+      characterType: 0
+    - chapterID: chapter_3
+      chapterName: New Chapter
+      description: "\uC0C8\uB85C\uC6B4 \uCC55\uD130"
+      acts: []
       characterType: 0
