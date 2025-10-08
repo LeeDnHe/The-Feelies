@@ -7,6 +7,9 @@ namespace TheFeelies.Managers
 {
     public class UIManager : MonoBehaviour
     {
+        private static UIManager instance;
+        public static UIManager Instance => instance;
+        
         [Header("Dialogue UI")]
         [SerializeField] private GameObject dialoguePanel;
         [SerializeField] private TextMeshProUGUI dialogueText;
@@ -26,6 +29,16 @@ namespace TheFeelies.Managers
         
         private void Awake()
         {
+            if (instance == null)
+            {
+                instance = this;
+            }
+            else
+            {
+                Destroy(gameObject);
+                return;
+            }
+            
             InitializeUI();
         }
         

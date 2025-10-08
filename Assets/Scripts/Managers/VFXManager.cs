@@ -5,6 +5,9 @@ namespace TheFeelies.Managers
 {
     public class VFXManager : MonoBehaviour
     {
+        private static VFXManager instance;
+        public static VFXManager Instance => instance;
+        
         [Header("VFX Prefabs")]
         [SerializeField] private List<GameObject> vfxPrefabs = new List<GameObject>();
         [SerializeField] private List<string> vfxNames = new List<string>();
@@ -19,6 +22,16 @@ namespace TheFeelies.Managers
         
         private void Awake()
         {
+            if (instance == null)
+            {
+                instance = this;
+            }
+            else
+            {
+                Destroy(gameObject);
+                return;
+            }
+            
             InitializeVFXMap();
             
             if (vfxParent == null)

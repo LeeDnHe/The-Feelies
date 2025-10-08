@@ -49,17 +49,17 @@ namespace TheFeelies.Managers
         
         private void InitializeManagers()
         {
-            // 매니저들이 없으면 자동으로 찾거나 생성
+            // 싱글톤 인스턴스에서 매니저 가져오기
             if (soundManager == null)
-                soundManager = FindObjectOfType<SoundManager>();
+                soundManager = SoundManager.Instance;
             if (animationManager == null)
-                animationManager = FindObjectOfType<AnimationManager>();
+                animationManager = AnimationManager.Instance;
             if (uiManager == null)
-                uiManager = FindObjectOfType<UIManager>();
+                uiManager = UIManager.Instance;
             if (vfxManager == null)
-                vfxManager = FindObjectOfType<VFXManager>();
+                vfxManager = VFXManager.Instance;
             if (playerManager == null)
-                playerManager = FindObjectOfType<PlayerManager>();
+                playerManager = PlayerManager.Instance;
         }
         
         public void LoadStory()

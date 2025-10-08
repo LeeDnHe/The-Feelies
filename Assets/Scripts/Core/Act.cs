@@ -123,13 +123,13 @@ namespace TheFeelies.Core
                     continue;
                 }
                 
-                Debug.Log($"Starting Cut {currentCutIndex + 1}: {currentCut.CutName}");
-                
-                // 컷 시작
-                currentCut.StartCut();
-                
-                // 컷이 완료될 때까지 대기
-                yield return new WaitUntil(() => !currentCut.IsPlaying);
+            Debug.Log($"Starting Cut {currentCutIndex + 1}: {currentCut.CutName}");
+            
+            // 컷 시작 (waitBeforeStart가 false면 즉시, true면 대기 상태로)
+            currentCut.OnPlayerInputBeforeStart();
+            
+            // 컷이 완료될 때까지 대기
+            yield return new WaitUntil(() => !currentCut.IsPlaying);
                 
                 Debug.Log($"Cut {currentCutIndex + 1} completed in act: {actName}");
                 

@@ -6,6 +6,9 @@ namespace TheFeelies.Managers
 {
     public class AnimationManager : MonoBehaviour
     {
+        private static AnimationManager instance;
+        public static AnimationManager Instance => instance;
+        
         [Header("Character Animators")]
         [SerializeField] private List<Animator> characterAnimators = new List<Animator>();
         [SerializeField] private List<string> characterNames = new List<string>();
@@ -17,6 +20,16 @@ namespace TheFeelies.Managers
         
         private void Awake()
         {
+            if (instance == null)
+            {
+                instance = this;
+            }
+            else
+            {
+                Destroy(gameObject);
+                return;
+            }
+            
             InitializeCharacterMap();
         }
         
@@ -51,10 +64,54 @@ namespace TheFeelies.Managers
                 
             if (characterAnimatorMap.TryGetValue(characterName, out Animator animator))
             {
-                // 애니메이션 클립을 직접 재생
-                animator.Play(animationClip.name, 0, 0f);
+                if (animator == null || animator.runtimeAnimatorController == null)
+                {
+                    Debug.LogError($"캐릭터 '{characterName}'의 Animator 또는 RuntimeAnimatorController가 null입니다!");
+                    return;
+                }
                 
-                Debug.Log($"캐릭터 '{characterName}' 애니메이션 재생: {animationClip.name}");
+                // 먼저 RuntimeAnimatorController의 AnimationClip 목록에서 찾기
+                var clips = animator.runtimeAnimatorController.animationClips;
+                bool clipFound = false;
+                
+                if (clips != null)
+                {
+                    foreach (var clip in clips)
+                    {
+                        if (clip.name == animationClip.name)
+                        {
+                            clipFound = true;
+                            break;
+                        }
+                    }
+                }
+                
+                if (clipFound)
+                {
+                    // AnimationClip이 존재하면 CrossFade로 재생 (State가 없어도 작동)
+                    animator.CrossFade(animationClip.name, 0.1f, 0, 0f);
+                    Debug.Log($"✓ 캐릭터 '{characterName}' 애니메이션 재생: {animationClip.name}");
+                }
+                else
+                {
+                    // AnimationClip을 찾을 수 없음 - 사용 가능한 Clip 목록 출력
+                    Debug.LogError($"✗ 캐릭터 '{characterName}'의 Animator Controller에 AnimationClip '{animationClip.name}'가 존재하지 않습니다!");
+                    Debug.LogWarning("=== 사용 가능한 Animation Clip 목록 ===");
+                    
+                    if (clips != null && clips.Length > 0)
+                    {
+                        for (int i = 0; i < clips.Length; i++)
+                        {
+                            Debug.Log($"  [{i}] {clips[i].name}");
+                        }
+                        Debug.LogWarning("=================================");
+                        Debug.LogWarning($"Unity Inspector에서 CutEvent의 Animation Clip을 위 목록 중 하나로 설정해주세요.");
+                    }
+                    else
+                    {
+                        Debug.LogError("RuntimeAnimatorController에 AnimationClip이 없습니다!");
+                    }
+                }
             }
             else
             {
