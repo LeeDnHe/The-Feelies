@@ -8,13 +8,13 @@ namespace TheFeelies.Managers
         [Header("Audio Sources")]
         [SerializeField] private AudioSource musicSource;
         [SerializeField] private AudioSource sfxSource;
-        [SerializeField] private AudioSource ttsSource;
+        [SerializeField] private AudioSource dialogSource;
         
         [Header("Audio Settings")]
         [SerializeField] private float masterVolume = 1f;
         [SerializeField] private float musicVolume = 0.8f;
         [SerializeField] private float sfxVolume = 1f;
-        [SerializeField] private float ttsVolume = 1f;
+        [SerializeField] private float dialogVolume = 1f;
         
         private void Awake()
         {
@@ -38,29 +38,29 @@ namespace TheFeelies.Managers
                 sfxSource = sfxGO.AddComponent<AudioSource>();
             }
             
-            if (ttsSource == null)
+            if (dialogSource == null)
             {
-                GameObject ttsGO = new GameObject("TTSSource");
-                ttsGO.transform.SetParent(transform);
-                ttsSource = ttsGO.AddComponent<AudioSource>();
+                GameObject dialogGO = new GameObject("DialogSource");
+                dialogGO.transform.SetParent(transform);
+                dialogSource = dialogGO.AddComponent<AudioSource>();
             }
             
             UpdateVolumes();
         }
         
-        public void PlayTTS(AudioClip ttsClip)
+        public void PlayDialog(AudioClip dialogClip)
         {
-            if (ttsClip != null)
+            if (dialogClip != null)
             {
-                ttsSource.clip = ttsClip;
-                ttsSource.Play();
-                Debug.Log($"TTS 재생: {ttsClip.name}");
+                dialogSource.clip = dialogClip;
+                dialogSource.Play();
+                Debug.Log($"대화 재생: {dialogClip.name}");
             }
         }
         
-        public void StopTTS()
+        public void StopDialog()
         {
-            ttsSource.Stop();
+            dialogSource.Stop();
         }
         
         public void PlayMusic(AudioClip musicClip)
@@ -105,9 +105,9 @@ namespace TheFeelies.Managers
             UpdateVolumes();
         }
         
-        public void SetTTSVolume(float volume)
+        public void SetDialogVolume(float volume)
         {
-            ttsVolume = Mathf.Clamp01(volume);
+            dialogVolume = Mathf.Clamp01(volume);
             UpdateVolumes();
         }
         
@@ -115,12 +115,12 @@ namespace TheFeelies.Managers
         {
             musicSource.volume = masterVolume * musicVolume;
             sfxSource.volume = masterVolume * sfxVolume;
-            ttsSource.volume = masterVolume * ttsVolume;
+            dialogSource.volume = masterVolume * dialogVolume;
         }
         
-        public bool IsTTSPlaying()
+        public bool IsDialogPlaying()
         {
-            return ttsSource.isPlaying;
+            return dialogSource.isPlaying;
         }
         
         public bool IsMusicPlaying()
