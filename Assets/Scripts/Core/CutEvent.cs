@@ -33,7 +33,7 @@ namespace TheFeelies.Core
         
         [Header("Audio Events")]
         [SerializeField] private AudioClip audioClip;
-        [SerializeField] private bool playAsBackgroundMusic = false;
+        [SerializeField] private AudioPlayType audioPlayType = AudioPlayType.Dialog;
         
         [Header("Controller Events")]
         [SerializeField] private bool enableController = true;
@@ -197,23 +197,33 @@ namespace TheFeelies.Core
                 return;
             }
             
-            if (playAsBackgroundMusic)
+            var soundManager = Object.FindObjectOfType<SoundManager>();
+            if (soundManager == null)
             {
-                // 배경음악으로 재생
-                var audioManager = Object.FindObjectOfType<AudioManager>();
-                if (audioManager != null)
-                {
-                    audioManager.PlayBackgroundMusic(audioClip);
-                }
-                else
-                {
-                    Debug.LogError("AudioManager not found!");
-                }
+                Debug.LogError("SoundManager not found!");
+                return;
             }
-            else
+            
+            switch (audioPlayType)
             {
-                // 효과음으로 재생
-                AudioSource.PlayClipAtPoint(audioClip, Camera.main.transform.position);
+                case AudioPlayType.Dialog:
+                    soundManager.PlayDialog(audioClip);
+                    Debug.Log($"대화 재생: {audioClip.name}");
+                    break;
+                    
+                case AudioPlayType.BackgroundMusic:
+                    soundManager.PlayMusic(audioClip);
+                    Debug.Log($"배경음악 재생: {audioClip.name}");
+                    break;
+                    
+                case AudioPlayType.SFX:
+                    soundManager.PlaySFX(audioClip);
+                    Debug.Log($"효과음 재생: {audioClip.name}");
+                    break;
+                    
+                default:
+                    Debug.LogWarning($"Unknown audio play type: {audioPlayType}");
+                    break;
             }
         }
         
@@ -327,5 +337,15 @@ namespace TheFeelies.Core
         ControllerControl,      // 컨트롤러 전체 (이동 + 상호작용)
         MovementControl,        // 이동 기능만
         AutoMovePlayer          // 자동이동 (경유지 포함)
+    }
+    
+    /// <summary>
+    /// 오디오 재생 타입 열거형
+    /// </summary>
+    public enum AudioPlayType
+    {
+        Dialog,                 // 대화 재생
+        BackgroundMusic,        // 배경음악 재생
+        SFX                     // 효과음 재생
     }
 }
