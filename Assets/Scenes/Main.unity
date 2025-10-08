@@ -473,22 +473,22 @@ PrefabInstance:
     - target: {fileID: -8679921383154817045, guid: 9b115f470cec5444286fe98edf910428,
         type: 3}
       propertyPath: m_LocalRotation.w
-      value: 1
+      value: 0.9644175
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 9b115f470cec5444286fe98edf910428,
         type: 3}
       propertyPath: m_LocalRotation.x
-      value: 0
+      value: -0
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 9b115f470cec5444286fe98edf910428,
         type: 3}
       propertyPath: m_LocalRotation.y
-      value: 0
+      value: 0.26438403
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 9b115f470cec5444286fe98edf910428,
         type: 3}
       propertyPath: m_LocalRotation.z
-      value: 0
+      value: -0
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 9b115f470cec5444286fe98edf910428,
         type: 3}
@@ -498,7 +498,7 @@ PrefabInstance:
     - target: {fileID: -8679921383154817045, guid: 9b115f470cec5444286fe98edf910428,
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.y
-      value: 0
+      value: 30.661
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 9b115f470cec5444286fe98edf910428,
         type: 3}
@@ -1707,7 +1707,7 @@ MonoBehaviour:
     shouldTeleport: 0
   - eventName: "\uD6A8\uACFC\uC74C \uC7AC\uC0DD"
     description: "\uBC43\uC18C\uB9AC"
-    delay: 26
+    delay: 26.5
     waitAfterExecution: 0
     eventType: 3
     onEventExecute:
