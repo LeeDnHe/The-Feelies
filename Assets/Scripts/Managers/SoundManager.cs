@@ -5,6 +5,9 @@ namespace TheFeelies.Managers
 {
     public class SoundManager : MonoBehaviour
     {
+        private static SoundManager instance;
+        public static SoundManager Instance => instance;
+        
         [Header("Audio Sources")]
         [SerializeField] private AudioSource musicSource;
         [SerializeField] private AudioSource sfxSource;
@@ -18,6 +21,16 @@ namespace TheFeelies.Managers
         
         private void Awake()
         {
+            if (instance == null)
+            {
+                instance = this;
+            }
+            else
+            {
+                Destroy(gameObject);
+                return;
+            }
+            
             InitializeAudioSources();
         }
         
@@ -52,6 +65,12 @@ namespace TheFeelies.Managers
         {
             if (dialogClip != null)
             {
+                // 이전 대화 재생 중지
+                if (dialogSource.isPlaying)
+                {
+                    dialogSource.Stop();
+                }
+                
                 dialogSource.clip = dialogClip;
                 dialogSource.Play();
                 Debug.Log($"대화 재생: {dialogClip.name}");
@@ -67,6 +86,12 @@ namespace TheFeelies.Managers
         {
             if (musicClip != null)
             {
+                // 이전 음악 재생 중지
+                if (musicSource.isPlaying)
+                {
+                    musicSource.Stop();
+                }
+                
                 musicSource.clip = musicClip;
                 musicSource.Play();
                 Debug.Log($"음악 재생: {musicClip.name}");
@@ -78,12 +103,45 @@ namespace TheFeelies.Managers
             musicSource.Stop();
         }
         
-        public void PlaySFX(AudioClip sfxClip)
+        public void PlaySFX(AudioClip sfxClip, bool loop = false)
+        {
+            if (sfxClip != null)
+            {
+                // 이전 SFX 재생 중지
+                if (sfxSource.isPlaying)
+                {
+                    sfxSource.Stop();
+                }
+                
+                sfxSource.clip = sfxClip;
+                sfxSource.loop = loop;
+                sfxSource.Play();
+                Debug.Log($"SFX 재생: {sfxClip.name} (Loop: {loop})");
+            }
+        }
+        
+        /// <summary>
+        /// SFX 중지
+        /// </summary>
+        public void StopSFX()
+        {
+            if (sfxSource.isPlaying)
+            {
+                sfxSource.Stop();
+                sfxSource.loop = false;
+                Debug.Log("SFX 중지");
+            }
+        }
+        
+        /// <summary>
+        /// 이전 SFX를 중지하지 않고 겹쳐서 재생 (여러 효과음 동시 재생)
+        /// </summary>
+        public void PlaySFXOneShot(AudioClip sfxClip)
         {
             if (sfxClip != null)
             {
                 sfxSource.PlayOneShot(sfxClip);
-                Debug.Log($"SFX 재생: {sfxClip.name}");
+                Debug.Log($"SFX 겹쳐서 재생: {sfxClip.name}");
             }
         }
         
@@ -113,9 +171,12 @@ namespace TheFeelies.Managers
         
         private void UpdateVolumes()
         {
-            musicSource.volume = masterVolume * musicVolume;
-            sfxSource.volume = masterVolume * sfxVolume;
-            dialogSource.volume = masterVolume * dialogVolume;
+            if (musicSource != null)
+                musicSource.volume = masterVolume * musicVolume;
+            if (sfxSource != null)
+                sfxSource.volume = masterVolume * sfxVolume;
+            if (dialogSource != null)
+                dialogSource.volume = masterVolume * dialogVolume;
         }
         
         public bool IsDialogPlaying()
@@ -126,6 +187,11 @@ namespace TheFeelies.Managers
         public bool IsMusicPlaying()
         {
             return musicSource.isPlaying;
+        }
+        
+        public bool IsSFXPlaying()
+        {
+            return sfxSource.isPlaying;
         }
     }
 } 

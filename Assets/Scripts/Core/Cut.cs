@@ -11,69 +11,70 @@ namespace TheFeelies.Core
     /// </summary>
     public class Cut : MonoBehaviour
     {
-        [Header("Cut Settings")]
-        [SerializeField] private string cutName;
-        [SerializeField] private string description;
-        [SerializeField] private float cutDuration = 3f;
-        [SerializeField] private bool waitForPlayerInputBeforeStart = false;
-        [SerializeField] private bool waitForPlayerInputBeforeEnd = false;
+    [Header("Cut Settings")]
+    [SerializeField] private string cutName;
+    [SerializeField] private string description;
+    [SerializeField] private float cutDuration = 3f;
+    [SerializeField] private bool waitBeforeStart = false;
+    [SerializeField] private bool waitBeforeEnd = false;
         
         [Header("Events")]
         [SerializeField] private List<CutEvent> startEvents = new List<CutEvent>();
         [SerializeField] private List<CutEvent> middleEvents = new List<CutEvent>();
         [SerializeField] private List<CutEvent> endEvents = new List<CutEvent>();
         
-        private bool isPlaying = false;
-        private bool isWaitingForInputBeforeStart = false;
-        private bool isWaitingForInputBeforeEnd = false;
-        
-        public string CutName => cutName;
-        public float CutDuration => cutDuration;
-        public bool WaitForPlayerInputBeforeStart => waitForPlayerInputBeforeStart;
-        public bool WaitForPlayerInputBeforeEnd => waitForPlayerInputBeforeEnd;
-        public bool IsPlaying => isPlaying;
-        public bool IsWaitingForInputBeforeStart => isWaitingForInputBeforeStart;
-        public bool IsWaitingForInputBeforeEnd => isWaitingForInputBeforeEnd;
+    private bool isPlaying = false;
+    private bool isWaitingBeforeStart = false;
+    private bool isWaitingBeforeEnd = false;
+    
+    public string CutName => cutName;
+    public float CutDuration => cutDuration;
+    public bool WaitBeforeStart => waitBeforeStart;
+    public bool WaitBeforeEnd => waitBeforeEnd;
+    public bool IsPlaying => isPlaying;
+    public bool IsWaitingBeforeStart => isWaitingBeforeStart;
+    public bool IsWaitingBeforeEnd => isWaitingBeforeEnd;
         
         private void Start()
         {
             // 자동 시작은 하지 않음 - Act에서 제어
         }
         
-        /// <summary>
-        /// 컷 재생 시작
-        /// </summary>
-        public void StartCut()
+    /// <summary>
+    /// 컷 재생 시작 (내부용)
+    /// </summary>
+    private void StartCut()
+    {
+        if (isPlaying)
         {
-            if (isPlaying)
-            {
-                Debug.LogWarning($"Cut {cutName} is already playing!");
-                return;
-            }
-            
-            isPlaying = true;
-            isWaitingForInputBeforeStart = false;
-            isWaitingForInputBeforeEnd = false;
-            
-            Debug.Log($"Starting Cut: {cutName}");
-            
-            StartCoroutine(PlayCutCoroutine());
+            Debug.LogWarning($"Cut {cutName} is already playing!");
+            return;
         }
         
-        /// <summary>
-        /// 컷 재생 중지
-        /// </summary>
-        public void StopCut()
-        {
-            if (!isPlaying) return;
-            
-            isPlaying = false;
-            isWaitingForInputBeforeStart = false;
-            isWaitingForInputBeforeEnd = false;
-            StopAllCoroutines();
-            
-            Debug.Log($"Stopping Cut: {cutName}");
-        }
+        isPlaying = true;
+        // isWaitingBeforeStart는 OnPlayerInputBeforeStart에서 설정되므로 여기서 초기화하지 않음
+        // isWaitingBeforeEnd는 여기서 초기화
+        isWaitingBeforeEnd = false;
+        
+        Debug.Log($"Starting Cut: {cutName}");
+        
+        StartCoroutine(PlayCutCoroutine());
+    }
+        
+    /// <summary>
+    /// 컷 재생 중지
+    /// </summary>
+    public void StopCut()
+    {
+        if (!isPlaying) return;
+        
+        isPlaying = false;
+        isWaitingBeforeStart = false;
+        isWaitingBeforeEnd = false;
+        StopAllCoroutines();
+        
+        Debug.Log($"Stopping Cut: {cutName}");
+    }
         
         /// <summary>
         /// 컷 재시작
@@ -84,48 +85,76 @@ namespace TheFeelies.Core
             StartCut();
         }
         
-        /// <summary>
-        /// 시작 전 플레이어 입력 대기 중일 때 호출
-        /// </summary>
-        public void OnPlayerInputBeforeStart()
+    /// <summary>
+    /// 컷 시작 요청 (이벤트 또는 트리거에서 호출)
+    /// waitBeforeStart가 true면 대기 상태로 진입, false면 즉시 시작
+    /// </summary>
+    public void OnPlayerInputBeforeStart()
+    {
+        // 이미 재생 중이고 대기 상태가 아니면 무시
+        if (isPlaying && !isWaitingBeforeStart)
         {
-            if (isWaitingForInputBeforeStart)
-            {
-                isWaitingForInputBeforeStart = false;
-                Debug.Log($"Player input before start received for cut: {cutName}");
-            }
+            Debug.LogWarning($"Cut {cutName} is already playing!");
+            return;
         }
         
-        /// <summary>
-        /// 종료 전 플레이어 입력 대기 중일 때 호출
-        /// </summary>
-        public void OnPlayerInputBeforeEnd()
+        // waitBeforeStart가 true이고 이미 대기 중이면 대기 해제
+        if (waitBeforeStart && isWaitingBeforeStart)
         {
-            if (isWaitingForInputBeforeEnd)
-            {
-                isWaitingForInputBeforeEnd = false;
-                Debug.Log($"Player input before end received for cut: {cutName}");
-            }
+            isWaitingBeforeStart = false;
+            Debug.Log($"Player input received, resuming cut: {cutName}");
+            return;
         }
         
-        /// <summary>
-        /// 플레이어 입력 대기 중일 때 호출 (하위 호환성을 위해 유지)
-        /// </summary>
-        public void OnPlayerInput()
+        // 이미 재생 중이 아닐 때만 새로 시작
+        if (!isPlaying)
         {
-            OnPlayerInputBeforeStart();
-            OnPlayerInputBeforeEnd();
-        }
-        
-        private IEnumerator PlayCutCoroutine()
-        {
-            // 1. 시작 전 플레이어 입력 대기
-            if (waitForPlayerInputBeforeStart)
+            // waitBeforeStart가 true면 대기 상태로 시작
+            if (waitBeforeStart)
             {
-                isWaitingForInputBeforeStart = true;
-                Debug.Log($"Waiting for player input before start in cut: {cutName}");
-                yield return new WaitUntil(() => !isWaitingForInputBeforeStart);
+                isWaitingBeforeStart = true;
+                Debug.Log($"Cut {cutName} starting in wait mode");
             }
+            else
+            {
+                isWaitingBeforeStart = false;
+                Debug.Log($"Cut {cutName} starting immediately");
+            }
+            
+            // 컷 시작
+            StartCut();
+        }
+    }
+    
+    /// <summary>
+    /// 종료 전 플레이어 입력 대기 중일 때 호출
+    /// </summary>
+    public void OnPlayerInputBeforeEnd()
+    {
+        if (isWaitingBeforeEnd)
+        {
+            isWaitingBeforeEnd = false;
+            Debug.Log($"Player input before end received for cut: {cutName}");
+        }
+    }
+    
+    /// <summary>
+    /// 플레이어 입력 대기 중일 때 호출 (하위 호환성을 위해 유지)
+    /// </summary>
+    public void OnPlayerInput()
+    {
+        OnPlayerInputBeforeStart();
+        OnPlayerInputBeforeEnd();
+    }
+        
+    private IEnumerator PlayCutCoroutine()
+    {
+        // 1. 시작 전 플레이어 입력 대기
+        if (waitBeforeStart && isWaitingBeforeStart)
+        {
+            Debug.Log($"Waiting for player input before start in cut: {cutName}");
+            yield return new WaitUntil(() => !isWaitingBeforeStart);
+        }
             
             // 2. 시작 이벤트 실행
             Debug.Log($"Executing start events for cut: {cutName}");
@@ -145,13 +174,13 @@ namespace TheFeelies.Core
                 yield return new WaitForSeconds(cutDuration);
             }
             
-            // 5. 종료 전 플레이어 입력 대기
-            if (waitForPlayerInputBeforeEnd)
-            {
-                isWaitingForInputBeforeEnd = true;
-                Debug.Log($"Waiting for player input before end in cut: {cutName}");
-                yield return new WaitUntil(() => !isWaitingForInputBeforeEnd);
-            }
+        // 5. 종료 전 플레이어 입력 대기
+        if (waitBeforeEnd)
+        {
+            isWaitingBeforeEnd = true;
+            Debug.Log($"Waiting for player input before end in cut: {cutName}");
+            yield return new WaitUntil(() => !isWaitingBeforeEnd);
+        }
             
             // 6. 종료 이벤트 실행
             Debug.Log($"Executing end events for cut: {cutName}");

@@ -34,21 +34,14 @@ namespace TheFeelies.Core
         [Header("Audio Events")]
         [SerializeField] private AudioClip audioClip;
         [SerializeField] private AudioPlayType audioPlayType = AudioPlayType.Dialog;
+        [SerializeField] private bool loopAudio = false;
         
-        [Header("Controller Events")]
-        [SerializeField] private bool enableController = true;
-        
-        [Header("Movement Events")]
-        [SerializeField] private bool enableMovement = true;
+        [Header("Player Control Events")]
+        [SerializeField] private bool enablePlayerControl = true;
         
         [Header("Teleport Events")]
         [SerializeField] private Vector3 teleportPosition = Vector3.zero;
         [SerializeField] private bool shouldTeleport = false;
-        
-        [Header("Auto Move Events")]
-        [SerializeField] private Vector3[] waypoints = new Vector3[0];
-        [SerializeField] private Vector3 singleDestination = Vector3.zero;
-        [SerializeField] private bool useWaypoints = false;
         
         public string EventName => eventName;
         public float Delay => delay;
@@ -92,16 +85,8 @@ namespace TheFeelies.Core
                     ExecuteChangeScene();
                     break;
                     
-                case CutEventType.ControllerControl:
-                    ExecuteControllerControl();
-                    break;
-                    
-                case CutEventType.MovementControl:
-                    ExecuteMovementControl();
-                    break;
-                    
-                case CutEventType.AutoMovePlayer:
-                    ExecuteAutoMovePlayer();
+                case CutEventType.PlayerControl:
+                    ExecutePlayerControl();
                     break;
                     
                 default:
@@ -134,10 +119,19 @@ namespace TheFeelies.Core
                 return;
             }
             
-            // 매니저 찾기 및 메서드 호출
-            var managers = Object.FindObjectsOfType<MonoBehaviour>();
+            // 싱글톤 매니저들에서 메서드 찾기 및 호출
+            MonoBehaviour[] managers = new MonoBehaviour[]
+            {
+                AnimationManager.Instance,
+                SoundManager.Instance,
+                PlayerManager.Instance,
+                AudioManager.Instance
+            };
+            
             foreach (var manager in managers)
             {
+                if (manager == null) continue;
+                
                 var method = manager.GetType().GetMethod(managerMethodName);
                 if (method != null)
                 {
@@ -149,11 +143,12 @@ namespace TheFeelies.Core
                     {
                         method.Invoke(manager, null);
                     }
+                    Debug.Log($"Manager method '{managerMethodName}' executed on {manager.GetType().Name}");
                     return;
                 }
             }
             
-            Debug.LogError($"Manager method '{managerMethodName}' not found!");
+            Debug.LogError($"Manager method '{managerMethodName}' not found in any manager!");
         }
         
         private void ExecutePlayAnimation()
@@ -164,29 +159,21 @@ namespace TheFeelies.Core
                 return;
             }
             
-            // 타겟 액터 찾기
-            GameObject targetActor = null;
-            if (!string.IsNullOrEmpty(targetActorId))
+            if (string.IsNullOrEmpty(targetActorId))
             {
-                targetActor = GameObject.Find(targetActorId);
-            }
-            
-            if (targetActor == null)
-            {
-                Debug.LogError($"Target actor '{targetActorId}' not found!");
+                Debug.LogError("Target actor ID is not set!");
                 return;
             }
             
-            // 애니메이션 실행
-            var animator = targetActor.GetComponent<Animator>();
-            if (animator != null)
+            // AnimationManager를 통해 애니메이션 재생
+            if (AnimationManager.Instance == null)
             {
-                animator.Play(animationClip.name);
+                Debug.LogError("AnimationManager instance not found!");
+                return;
             }
-            else
-            {
-                Debug.LogError($"Animator component not found on {targetActor.name}!");
-            }
+            
+            AnimationManager.Instance.PlayCharacterAnimation(targetActorId, animationClip);
+            Debug.Log($"Animation played via AnimationManager: {animationClip.name} for actor: {targetActorId}");
         }
         
         private void ExecutePlayAudio()
@@ -197,28 +184,27 @@ namespace TheFeelies.Core
                 return;
             }
             
-            var soundManager = Object.FindObjectOfType<SoundManager>();
-            if (soundManager == null)
+            if (SoundManager.Instance == null)
             {
-                Debug.LogError("SoundManager not found!");
+                Debug.LogError("SoundManager instance not found!");
                 return;
             }
             
             switch (audioPlayType)
             {
                 case AudioPlayType.Dialog:
-                    soundManager.PlayDialog(audioClip);
+                    SoundManager.Instance.PlayDialog(audioClip);
                     Debug.Log($"대화 재생: {audioClip.name}");
                     break;
                     
                 case AudioPlayType.BackgroundMusic:
-                    soundManager.PlayMusic(audioClip);
+                    SoundManager.Instance.PlayMusic(audioClip);
                     Debug.Log($"배경음악 재생: {audioClip.name}");
                     break;
                     
                 case AudioPlayType.SFX:
-                    soundManager.PlaySFX(audioClip);
-                    Debug.Log($"효과음 재생: {audioClip.name}");
+                    SoundManager.Instance.PlaySFX(audioClip, loopAudio);
+                    Debug.Log($"효과음 재생: {audioClip.name} (Loop: {loopAudio})");
                     break;
                     
                 default:
@@ -232,15 +218,13 @@ namespace TheFeelies.Core
         {
             if (!shouldTeleport) return;
             
-            var playerManager = Object.FindObjectOfType<PlayerManager>();
-            if (playerManager != null)
+            if (PlayerManager.Instance == null)
             {
-                playerManager.TeleportPlayer(teleportPosition);
+                Debug.LogError("PlayerManager instance not found!");
+                return;
             }
-            else
-            {
-                Debug.LogError("PlayerManager not found!");
-            }
+            
+            PlayerManager.Instance.TeleportPlayer(teleportPosition);
         }
         
         private void ExecuteChangeBackgroundMusic()
@@ -251,15 +235,13 @@ namespace TheFeelies.Core
                 return;
             }
             
-            var audioManager = Object.FindObjectOfType<AudioManager>();
-            if (audioManager != null)
+            if (AudioManager.Instance == null)
             {
-                audioManager.ChangeBackgroundMusic(audioClip);
+                Debug.LogError("AudioManager instance not found!");
+                return;
             }
-            else
-            {
-                Debug.LogError("AudioManager not found!");
-            }
+            
+            AudioManager.Instance.ChangeBackgroundMusic(audioClip);
         }
         
         private void ExecuteChangeScene()
@@ -271,54 +253,15 @@ namespace TheFeelies.Core
             }
         }
         
-        private void ExecuteControllerControl()
+        private void ExecutePlayerControl()
         {
-            var playerManager = Object.FindObjectOfType<PlayerManager>();
-            if (playerManager != null)
+            if (PlayerManager.Instance == null)
             {
-                playerManager.SetControllerEnabled(enableController);
+                Debug.LogError("PlayerManager instance not found!");
+                return;
             }
-            else
-            {
-                Debug.LogError("PlayerManager not found!");
-            }
-        }
-        
-        private void ExecuteMovementControl()
-        {
-            var playerManager = Object.FindObjectOfType<PlayerManager>();
-            if (playerManager != null)
-            {
-                playerManager.SetPlayerMovementEnabled(enableMovement);
-            }
-            else
-            {
-                Debug.LogError("PlayerManager not found!");
-            }
-        }
-        
-        private void ExecuteAutoMovePlayer()
-        {
-            var playerManager = Object.FindObjectOfType<PlayerManager>();
-            if (playerManager != null)
-            {
-                if (useWaypoints && waypoints != null && waypoints.Length > 0)
-                {
-                    playerManager.AutoMovePlayer(waypoints);
-                }
-                else if (singleDestination != Vector3.zero)
-                {
-                    playerManager.AutoMovePlayer(singleDestination);
-                }
-                else
-                {
-                    Debug.LogError("No valid destination set for auto move!");
-                }
-            }
-            else
-            {
-                Debug.LogError("PlayerManager not found!");
-            }
+            
+            PlayerManager.Instance.SetPlayerControlEnabled(enablePlayerControl);
         }
     }
     
@@ -334,9 +277,7 @@ namespace TheFeelies.Core
         TeleportPlayer,         // 플레이어 텔레포트
         ChangeBackgroundMusic,  // 배경음악 변경
         ChangeScene,            // 씬 변경
-        ControllerControl,      // 컨트롤러 전체 (이동 + 상호작용)
-        MovementControl,        // 이동 기능만
-        AutoMovePlayer          // 자동이동 (경유지 포함)
+        PlayerControl           // 플레이어 제어 (컨트롤러 + 이동)
     }
     
     /// <summary>

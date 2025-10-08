@@ -169,7 +169,7 @@ MonoBehaviour:
   tweenTargetIsTargetGO: 1
   delay: 0
   duration: 5
-  easeType: 15
+  easeType: 6
   easeCurve:
     serializedVersion: 2
     m_Curve:
@@ -267,7 +267,20 @@ MonoBehaviour:
   - GameController
   preventMultipleTriggers: 1
   triggerCooldown: 0.5
-  onTriggerActivated:
+  enableDurationTrigger: 1
+  requiredContactTime: 1
+  enableHaptics: 1
+  hapticIntensity: 0.5
+  hapticDuration: 0.1
+  continuousHaptics: 1
+  continuousHapticInterval: 0.2
+  autoDetectHand: 1
+  sendToLeftHand: 1
+  sendToRightHand: 1
+  onImmediateTrigger:
+    m_PersistentCalls:
+      m_Calls: []
+  onDurationTrigger:
     m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 166116060}
@@ -282,6 +295,25 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
+  onContactStart:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 1204541969}
+        m_TargetAssemblyTypeName: TheFeelies.Managers.SoundManager, Assembly-CSharp
+        m_MethodName: PlaySFXOneShot
+        m_Mode: 2
+        m_Arguments:
+          m_ObjectArgument: {fileID: 8300000, guid: d68e831ebe87d4e48b0dacf2288bd6f0,
+            type: 3}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.AudioClip, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+  onContactEnd:
+    m_PersistentCalls:
+      m_Calls: []
 --- !u!1 &32325995
 GameObject:
   m_ObjectHideFlags: 0
@@ -411,52 +443,52 @@ PrefabInstance:
     - target: {fileID: -8679921383154817045, guid: 9b115f470cec5444286fe98edf910428,
         type: 3}
       propertyPath: m_LocalScale.x
-      value: 2
+      value: 2.5
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 9b115f470cec5444286fe98edf910428,
         type: 3}
       propertyPath: m_LocalScale.y
-      value: 2
+      value: 2.5
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 9b115f470cec5444286fe98edf910428,
         type: 3}
       propertyPath: m_LocalScale.z
-      value: 2
+      value: 2.5
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 9b115f470cec5444286fe98edf910428,
         type: 3}
       propertyPath: m_LocalPosition.x
-      value: -2.83
+      value: 2.64
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 9b115f470cec5444286fe98edf910428,
         type: 3}
       propertyPath: m_LocalPosition.y
-      value: 34.36
+      value: 34.281
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 9b115f470cec5444286fe98edf910428,
         type: 3}
       propertyPath: m_LocalPosition.z
-      value: 47.68
+      value: 46.31
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 9b115f470cec5444286fe98edf910428,
         type: 3}
       propertyPath: m_LocalRotation.w
-      value: 1
+      value: 0.9644175
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 9b115f470cec5444286fe98edf910428,
         type: 3}
       propertyPath: m_LocalRotation.x
-      value: 0
+      value: -0
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 9b115f470cec5444286fe98edf910428,
         type: 3}
       propertyPath: m_LocalRotation.y
-      value: 0
+      value: 0.26438403
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 9b115f470cec5444286fe98edf910428,
         type: 3}
       propertyPath: m_LocalRotation.z
-      value: 0
+      value: -0
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 9b115f470cec5444286fe98edf910428,
         type: 3}
@@ -466,7 +498,7 @@ PrefabInstance:
     - target: {fileID: -8679921383154817045, guid: 9b115f470cec5444286fe98edf910428,
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.y
-      value: 0
+      value: 30.661
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 9b115f470cec5444286fe98edf910428,
         type: 3}
@@ -476,8 +508,13 @@ PrefabInstance:
     - target: {fileID: 919132149155446097, guid: 9b115f470cec5444286fe98edf910428,
         type: 3}
       propertyPath: m_Name
-      value: watson_S01_02
+      value: Watson
       objectReference: {fileID: 0}
+    - target: {fileID: 5866666021909216657, guid: 9b115f470cec5444286fe98edf910428,
+        type: 3}
+      propertyPath: m_Controller
+      value: 
+      objectReference: {fileID: 9100000, guid: 5f85c86625aca0545b96a4ae8311903b, type: 2}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -673,30 +710,9 @@ MonoBehaviour:
   cutName: "Day 1 \uC0C8\uBCBD"
   description: "\uC120\uC2E4 \uB0B4\uBD80_\uAC70\uC6B8\uC0C1\uD638\uC791\uC6A9 \uC774\uD6C4"
   cutDuration: 0
-  waitForPlayerInputBeforeStart: 0
-  waitForPlayerInputBeforeEnd: 1
-  startEvents:
-  - eventName: "\uCEE8\uD2B8\uB864\uB7EC \uD65C\uC131\uD654"
-    description: 
-    delay: 0
-    waitAfterExecution: 0
-    eventType: 7
-    onEventExecute:
-      m_PersistentCalls:
-        m_Calls: []
-    managerMethodName: 
-    parameters: []
-    animationClip: {fileID: 0}
-    targetActorId: 
-    audioClip: {fileID: 0}
-    audioPlayType: 0
-    enableController: 1
-    enableMovement: 0
-    teleportPosition: {x: 0, y: 0, z: 0}
-    shouldTeleport: 0
-    waypoints: []
-    singleDestination: {x: 0, y: 0, z: 0}
-    useWaypoints: 0
+  waitBeforeStart: 0
+  waitBeforeEnd: 1
+  startEvents: []
   middleEvents:
   - eventName: "\uBB38 \uB77C\uC774\uD305 \uBC18\uC9DD\uC784 \uCD94\uAC00"
     description: 
@@ -724,13 +740,10 @@ MonoBehaviour:
     targetActorId: 
     audioClip: {fileID: 0}
     audioPlayType: 0
-    enableController: 0
-    enableMovement: 0
+    loopAudio: 0
+    enablePlayerControl: 1
     teleportPosition: {x: 0, y: 0, z: 0}
     shouldTeleport: 0
-    waypoints: []
-    singleDestination: {x: 0, y: 0, z: 0}
-    useWaypoints: 0
   endEvents:
   - eventName: "\uBB38 \uB77C\uC774\uD305 \uBC18\uC9DD\uC784 \uD574\uC81C"
     description: 
@@ -758,13 +771,10 @@ MonoBehaviour:
     targetActorId: 
     audioClip: {fileID: 0}
     audioPlayType: 0
-    enableController: 0
-    enableMovement: 0
+    loopAudio: 0
+    enablePlayerControl: 1
     teleportPosition: {x: 0, y: 0, z: 0}
     shouldTeleport: 0
-    waypoints: []
-    singleDestination: {x: 0, y: 0, z: 0}
-    useWaypoints: 0
   - eventName: "\uBB38 \uD1B1\uB2C8\uBC14\uD034 \uD68C\uC804"
     description: 
     delay: 0
@@ -791,13 +801,58 @@ MonoBehaviour:
     targetActorId: 
     audioClip: {fileID: 0}
     audioPlayType: 0
-    enableController: 0
-    enableMovement: 0
+    loopAudio: 0
+    enablePlayerControl: 1
     teleportPosition: {x: 0, y: 0, z: 0}
     shouldTeleport: 0
-    waypoints: []
-    singleDestination: {x: 0, y: 0, z: 0}
-    useWaypoints: 0
+  - eventName: "\uD6A8\uACFC\uC74C \uD574\uC81C"
+    description: 
+    delay: 0
+    waitAfterExecution: 0
+    eventType: 0
+    onEventExecute:
+      m_PersistentCalls:
+        m_Calls:
+        - m_Target: {fileID: 1204541969}
+          m_TargetAssemblyTypeName: TheFeelies.Managers.SoundManager, Assembly-CSharp
+          m_MethodName: StopSFX
+          m_Mode: 1
+          m_Arguments:
+            m_ObjectArgument: {fileID: 0}
+            m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+            m_IntArgument: 0
+            m_FloatArgument: 0
+            m_StringArgument: 
+            m_BoolArgument: 0
+          m_CallState: 2
+    managerMethodName: 
+    parameters: []
+    animationClip: {fileID: 0}
+    targetActorId: 
+    audioClip: {fileID: 0}
+    audioPlayType: 0
+    loopAudio: 0
+    enablePlayerControl: 1
+    teleportPosition: {x: 0, y: 0, z: 0}
+    shouldTeleport: 0
+  - eventName: "\uD6A8\uACFC\uC74C \uC7AC\uC0DD"
+    description: "\uBB38 \uD1B1\uB2C8\uBC14\uD034"
+    delay: 0
+    waitAfterExecution: 0
+    eventType: 3
+    onEventExecute:
+      m_PersistentCalls:
+        m_Calls: []
+    managerMethodName: 
+    parameters: []
+    animationClip: {fileID: 0}
+    targetActorId: 
+    audioClip: {fileID: 8300000, guid: 06062fd65fc8a99418274325bf95d8cc, type: 3}
+    audioPlayType: 2
+    loopAudio: 0
+    enablePlayerControl: 1
+    teleportPosition: {x: 0, y: 0, z: 0}
+    shouldTeleport: 0
   - eventName: "\uCEE8\uD2B8\uB864\uB7EC \uD574\uC81C"
     description: 
     delay: 0
@@ -812,13 +867,10 @@ MonoBehaviour:
     targetActorId: 
     audioClip: {fileID: 0}
     audioPlayType: 0
-    enableController: 0
-    enableMovement: 0
+    loopAudio: 0
+    enablePlayerControl: 0
     teleportPosition: {x: 0, y: 0, z: 0}
     shouldTeleport: 0
-    waypoints: []
-    singleDestination: {x: 0, y: 0, z: 0}
-    useWaypoints: 0
 --- !u!4 &166116061
 Transform:
   m_ObjectHideFlags: 0
@@ -1121,7 +1173,17 @@ MonoBehaviour:
   - GameController
   preventMultipleTriggers: 1
   triggerCooldown: 0.5
-  onTriggerActivated:
+  enableDurationTrigger: 0
+  requiredContactTime: 1
+  enableHaptics: 1
+  hapticIntensity: 0.5
+  hapticDuration: 0.1
+  continuousHaptics: 0
+  continuousHapticInterval: 0.5
+  autoDetectHand: 1
+  sendToLeftHand: 1
+  sendToRightHand: 1
+  onImmediateTrigger:
     m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 575071051}
@@ -1136,6 +1198,15 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
+  onDurationTrigger:
+    m_PersistentCalls:
+      m_Calls: []
+  onContactStart:
+    m_PersistentCalls:
+      m_Calls: []
+  onContactEnd:
+    m_PersistentCalls:
+      m_Calls: []
 --- !u!1001 &334351161
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -1266,7 +1337,7 @@ MonoBehaviour:
   targetGO: {fileID: 0}
   tweenTargetIsTargetGO: 1
   delay: 0
-  duration: 70
+  duration: 80
   easeType: 6
   easeCurve:
     serializedVersion: 2
@@ -1363,6 +1434,7 @@ MonoBehaviour:
   backgroundScene: 
   cuts:
   - {fileID: 1073009835}
+  - {fileID: 537444356}
   onActStart:
     m_PersistentCalls:
       m_Calls: []
@@ -1395,7 +1467,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 458538029}
-  - component: {fileID: 458538030}
   m_Layer: 0
   m_Name: 1-2-1 (6)
   m_TagString: Untagged
@@ -1412,132 +1483,12 @@ Transform:
   m_GameObject: {fileID: 458538028}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 1.21, y: 0.145, z: 70.43}
+  m_LocalPosition: {x: 1.21, y: 0.2, z: 70.43}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 1935156203}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &458538030
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 458538028}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 4d0390bd8b8ffd640b34fe25065ff1df, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  updateType: 0
-  isSpeedBased: 1
-  hasOnStart: 0
-  hasOnPlay: 0
-  hasOnUpdate: 0
-  hasOnStepComplete: 0
-  hasOnComplete: 1
-  hasOnTweenCreated: 0
-  hasOnRewind: 0
-  onStart:
-    m_PersistentCalls:
-      m_Calls: []
-  onPlay:
-    m_PersistentCalls:
-      m_Calls: []
-  onUpdate:
-    m_PersistentCalls:
-      m_Calls: []
-  onStepComplete:
-    m_PersistentCalls:
-      m_Calls: []
-  onComplete:
-    m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 1454333049}
-        m_TargetAssemblyTypeName: DG.Tweening.DOTweenAnimation, Assembly-CSharp-firstpass
-        m_MethodName: DORestart
-        m_Mode: 1
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
-  onTweenCreated:
-    m_PersistentCalls:
-      m_Calls: []
-  onRewind:
-    m_PersistentCalls:
-      m_Calls: []
-  targetIsSelf: 0
-  targetGO: {fileID: 1249804469}
-  tweenTargetIsTargetGO: 1
-  delay: 0
-  duration: 3
-  easeType: 6
-  easeCurve:
-    serializedVersion: 2
-    m_Curve:
-    - serializedVersion: 3
-      time: 0
-      value: 0
-      inSlope: 0
-      outSlope: 0
-      tangentMode: 0
-      weightedMode: 0
-      inWeight: 0
-      outWeight: 0
-    - serializedVersion: 3
-      time: 1
-      value: 1
-      inSlope: 0
-      outSlope: 0
-      tangentMode: 0
-      weightedMode: 0
-      inWeight: 0
-      outWeight: 0
-    m_PreInfinity: 2
-    m_PostInfinity: 2
-    m_RotationOrder: 4
-  loopType: 0
-  loops: 1
-  id: 1-2-1_6
-  isRelative: 0
-  isFrom: 0
-  isIndependentUpdate: 0
-  autoKill: 1
-  autoGenerate: 1
-  isActive: 1
-  isValid: 1
-  target: {fileID: 1249804474}
-  animationType: 1
-  targetType: 8
-  forcedTargetType: 0
-  autoPlay: 0
-  useTargetAsV3: 1
-  endValueFloat: 0
-  endValueV3: {x: -0.26999998, y: 34.445, z: 32.423}
-  endValueV2: {x: 0, y: 0}
-  endValueColor: {r: 1, g: 1, b: 1, a: 1}
-  endValueString: 
-  endValueRect:
-    serializedVersion: 2
-    x: 0
-    y: 0
-    width: 0
-    height: 0
-  endValueTransform: {fileID: 458538029}
-  optionalBool0: 0
-  optionalBool1: 0
-  optionalFloat0: 0
-  optionalInt0: 0
-  optionalRotationMode: 0
-  optionalScrambleMode: 0
-  optionalShakeRandomnessMode: 0
-  optionalString: 
 --- !u!1 &505418514
 GameObject:
   m_ObjectHideFlags: 0
@@ -1584,7 +1535,7 @@ AudioSource:
   m_PlayOnAwake: 1
   m_Volume: 0.5
   m_Pitch: 1
-  Loop: 0
+  Loop: 1
   Mute: 0
   Spatialize: 0
   SpatializePostEffects: 0
@@ -1713,8 +1664,8 @@ MonoBehaviour:
   cutName: "Day1 \uC0C8\uBCBD"
   description: "\uC653\uC2A8\uACFC \uC15C\uB85D \uB300\uD654"
   cutDuration: 0
-  waitForPlayerInputBeforeStart: 0
-  waitForPlayerInputBeforeEnd: 1
+  waitBeforeStart: 1
+  waitBeforeEnd: 1
   startEvents:
   - eventName: 
     description: 
@@ -1731,13 +1682,10 @@ MonoBehaviour:
     targetActorId: Watson
     audioClip: {fileID: 0}
     audioPlayType: 0
-    enableController: 0
-    enableMovement: 0
+    loopAudio: 0
+    enablePlayerControl: 1
     teleportPosition: {x: 0, y: 0, z: 0}
     shouldTeleport: 0
-    waypoints: []
-    singleDestination: {x: 0, y: 0, z: 0}
-    useWaypoints: 0
   middleEvents:
   - eventName: "\uC74C\uC131\uB300\uD654 \uC7AC\uC0DD"
     description: 
@@ -1753,14 +1701,59 @@ MonoBehaviour:
     targetActorId: 
     audioClip: {fileID: 8300000, guid: 3fc238d919663a046bf9c2bb3a7382a1, type: 3}
     audioPlayType: 0
-    enableController: 0
-    enableMovement: 0
+    loopAudio: 0
+    enablePlayerControl: 1
     teleportPosition: {x: 0, y: 0, z: 0}
     shouldTeleport: 0
-    waypoints: []
-    singleDestination: {x: 0, y: 0, z: 0}
-    useWaypoints: 0
-  endEvents: []
+  - eventName: "\uD6A8\uACFC\uC74C \uC7AC\uC0DD"
+    description: "\uBC43\uC18C\uB9AC"
+    delay: 26.5
+    waitAfterExecution: 0
+    eventType: 3
+    onEventExecute:
+      m_PersistentCalls:
+        m_Calls: []
+    managerMethodName: 
+    parameters: []
+    animationClip: {fileID: 0}
+    targetActorId: 
+    audioClip: {fileID: 8300000, guid: 4a185d8d04272d940b3726cdc6b5b231, type: 3}
+    audioPlayType: 2
+    loopAudio: 0
+    enablePlayerControl: 1
+    teleportPosition: {x: 0, y: 0, z: 0}
+    shouldTeleport: 0
+  endEvents:
+  - eventName: "\uBC30\uACBD\uC74C\uC545 \uD574\uC81C"
+    description: "\uBE44\uD589\uC120 \uC18C\uB9AC"
+    delay: 0
+    waitAfterExecution: 0
+    eventType: 0
+    onEventExecute:
+      m_PersistentCalls:
+        m_Calls:
+        - m_Target: {fileID: 1204541969}
+          m_TargetAssemblyTypeName: TheFeelies.Managers.SoundManager, Assembly-CSharp
+          m_MethodName: StopMusic
+          m_Mode: 1
+          m_Arguments:
+            m_ObjectArgument: {fileID: 0}
+            m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+            m_IntArgument: 0
+            m_FloatArgument: 0
+            m_StringArgument: 
+            m_BoolArgument: 0
+          m_CallState: 2
+    managerMethodName: 
+    parameters: []
+    animationClip: {fileID: 0}
+    targetActorId: 
+    audioClip: {fileID: 0}
+    audioPlayType: 0
+    loopAudio: 0
+    enablePlayerControl: 1
+    teleportPosition: {x: 0, y: 0, z: 0}
+    shouldTeleport: 0
 --- !u!1 &575071049
 GameObject:
   m_ObjectHideFlags: 0
@@ -1808,8 +1801,8 @@ MonoBehaviour:
   cutName: "Day 1 \uC0C8\uBCBD"
   description: "\uC120\uC2E4 \uB0B4\uBD80_ \uAC70\uC6B8 \uC55E"
   cutDuration: 0
-  waitForPlayerInputBeforeStart: 1
-  waitForPlayerInputBeforeEnd: 0
+  waitBeforeStart: 1
+  waitBeforeEnd: 0
   startEvents:
   - eventName: "\uAC70\uC6B8 \uD130\uCE58 \uAC10\uC9C0 \uC9C1\uD6C4 \uC601\uC0C1
       \uC7AC\uC0DD"
@@ -1850,13 +1843,28 @@ MonoBehaviour:
     targetActorId: 
     audioClip: {fileID: 0}
     audioPlayType: 0
-    enableController: 0
-    enableMovement: 0
+    loopAudio: 0
+    enablePlayerControl: 1
     teleportPosition: {x: 0, y: 0, z: 0}
     shouldTeleport: 0
-    waypoints: []
-    singleDestination: {x: 0, y: 0, z: 0}
-    useWaypoints: 0
+  - eventName: "\uD6A8\uACFC\uC74C \uC7AC\uC0DD"
+    description: "\uAC70\uC6B8\uB2E6\uB294\uC18C\uB9AC"
+    delay: 0
+    waitAfterExecution: 0
+    eventType: 3
+    onEventExecute:
+      m_PersistentCalls:
+        m_Calls: []
+    managerMethodName: 
+    parameters: []
+    animationClip: {fileID: 0}
+    targetActorId: 
+    audioClip: {fileID: 8300000, guid: 8c5c9dd4443ca12488622f7b0935776f, type: 3}
+    audioPlayType: 2
+    loopAudio: 0
+    enablePlayerControl: 1
+    teleportPosition: {x: 0, y: 0, z: 0}
+    shouldTeleport: 0
   middleEvents: []
   endEvents:
   - eventName: "\uBC29 \uD658\uD558\uAC8C \uBC1D\uD788\uB294 \uC774\uBCA4\uD2B8"
@@ -1885,13 +1893,10 @@ MonoBehaviour:
     targetActorId: 
     audioClip: {fileID: 0}
     audioPlayType: 0
-    enableController: 0
-    enableMovement: 0
+    loopAudio: 0
+    enablePlayerControl: 1
     teleportPosition: {x: 0, y: 0, z: 0}
     shouldTeleport: 0
-    waypoints: []
-    singleDestination: {x: 0, y: 0, z: 0}
-    useWaypoints: 0
 --- !u!1 &588887917
 GameObject:
   m_ObjectHideFlags: 0
@@ -1918,7 +1923,7 @@ Transform:
   m_GameObject: {fileID: 588887917}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0.099, y: -0.978, z: 1.39}
+  m_LocalPosition: {x: 0.09899998, y: -0.97800064, z: 1.3899994}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -1970,7 +1975,7 @@ MonoBehaviour:
   targetGO: {fileID: 1249804469}
   tweenTargetIsTargetGO: 1
   delay: 0
-  duration: 4
+  duration: 2
   easeType: 6
   easeCurve:
     serializedVersion: 2
@@ -2301,111 +2306,6 @@ GameObject:
     type: 3}
   m_PrefabInstance: {fileID: 1456328862}
   m_PrefabAsset: {fileID: 0}
---- !u!1 &762062931
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 762062935}
-  - component: {fileID: 762062934}
-  - component: {fileID: 762062933}
-  - component: {fileID: 762062932}
-  m_Layer: 0
-  m_Name: Sphere
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!135 &762062932
-SphereCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 762062931}
-  m_Material: {fileID: 0}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_LayerOverridePriority: 0
-  m_IsTrigger: 0
-  m_ProvidesContacts: 0
-  m_Enabled: 1
-  serializedVersion: 3
-  m_Radius: 0.5
-  m_Center: {x: 0, y: 0, z: 0}
---- !u!23 &762062933
-MeshRenderer:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 762062931}
-  m_Enabled: 1
-  m_CastShadows: 1
-  m_ReceiveShadows: 1
-  m_DynamicOccludee: 1
-  m_StaticShadowCaster: 0
-  m_MotionVectors: 1
-  m_LightProbeUsage: 1
-  m_ReflectionProbeUsage: 1
-  m_RayTracingMode: 2
-  m_RayTraceProcedural: 0
-  m_RenderingLayerMask: 1
-  m_RendererPriority: 0
-  m_Materials:
-  - {fileID: 2100000, guid: 31321ba15b8f8eb4c954353edc038b1d, type: 2}
-  m_StaticBatchInfo:
-    firstSubMesh: 0
-    subMeshCount: 0
-  m_StaticBatchRoot: {fileID: 0}
-  m_ProbeAnchor: {fileID: 0}
-  m_LightProbeVolumeOverride: {fileID: 0}
-  m_ScaleInLightmap: 1
-  m_ReceiveGI: 1
-  m_PreserveUVs: 0
-  m_IgnoreNormalsForChartDetection: 0
-  m_ImportantGI: 0
-  m_StitchLightmapSeams: 1
-  m_SelectedEditorRenderState: 3
-  m_MinimumChartSize: 4
-  m_AutoUVMaxDistance: 0.5
-  m_AutoUVMaxAngle: 89
-  m_LightmapParameters: {fileID: 0}
-  m_SortingLayerID: 0
-  m_SortingLayer: 0
-  m_SortingOrder: 0
-  m_AdditionalVertexStreams: {fileID: 0}
---- !u!33 &762062934
-MeshFilter:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 762062931}
-  m_Mesh: {fileID: 10207, guid: 0000000000000000e000000000000000, type: 0}
---- !u!4 &762062935
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 762062931}
-  serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -2.22, y: 33.42, z: -37.15}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 0}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &888529201
 GameObject:
   m_ObjectHideFlags: 0
@@ -2432,7 +2332,7 @@ Transform:
   m_GameObject: {fileID: 888529201}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 9.13, y: -0.978, z: 13.48}
+  m_LocalPosition: {x: 9.13, y: -0.8, z: 13.193}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -2447,36 +2347,40 @@ MonoBehaviour:
   m_GameObject: {fileID: 888529201}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 4d0390bd8b8ffd640b34fe25065ff1df, type: 3}
+  m_Script: {fileID: 11500000, guid: 8d473470d142129459e89e0ac64cbe5c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  updateType: 0
-  isSpeedBased: 1
-  hasOnStart: 0
-  hasOnPlay: 0
-  hasOnUpdate: 0
-  hasOnStepComplete: 0
-  hasOnComplete: 1
-  hasOnTweenCreated: 0
-  hasOnRewind: 0
-  onStart:
-    m_PersistentCalls:
-      m_Calls: []
-  onPlay:
-    m_PersistentCalls:
-      m_Calls: []
-  onUpdate:
-    m_PersistentCalls:
-      m_Calls: []
-  onStepComplete:
-    m_PersistentCalls:
-      m_Calls: []
-  onComplete:
+  targetObject: {fileID: 1249804478}
+  waypoints:
+  - {fileID: 888529202}
+  - {fileID: 2070445329}
+  - {fileID: 1172511837}
+  - {fileID: 1321330781}
+  - {fileID: 975088014}
+  - {fileID: 458538029}
+  - {fileID: 1454333048}
+  duration: 20
+  pathType: 0
+  pathMode: 3
+  resolution: 10
+  loops: 1
+  loopType: 0
+  ease: 1
+  playOnStart: 0
+  lookAtDirection: 0
+  lookAheadOffset: {x: 0, y: 0, z: 0}
+  rotateCameraAtWaypoints: 1
+  cameraTransform: {fileID: 1144020299}
+  cameraRotationDuration: 0.5
+  cameraRotationEase: 6
+  showPath: 1
+  pathColor: {r: 0, g: 1, b: 0, a: 1}
+  onPathComplete:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 2070445330}
-        m_TargetAssemblyTypeName: DG.Tweening.DOTweenAnimation, Assembly-CSharp-firstpass
-        m_MethodName: DORestart
+      - m_Target: {fileID: 537444356}
+        m_TargetAssemblyTypeName: TheFeelies.Core.Cut, Assembly-CSharp
+        m_MethodName: OnPlayerInputBeforeStart
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -2486,78 +2390,21 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
-  onTweenCreated:
+      - m_Target: {fileID: 1204541969}
+        m_TargetAssemblyTypeName: TheFeelies.Managers.SoundManager, Assembly-CSharp
+        m_MethodName: StopSFX
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+  onPathStart:
     m_PersistentCalls:
       m_Calls: []
-  onRewind:
-    m_PersistentCalls:
-      m_Calls: []
-  targetIsSelf: 0
-  targetGO: {fileID: 1249804469}
-  tweenTargetIsTargetGO: 1
-  delay: 0
-  duration: 3
-  easeType: 6
-  easeCurve:
-    serializedVersion: 2
-    m_Curve:
-    - serializedVersion: 3
-      time: 0
-      value: 0
-      inSlope: 0
-      outSlope: 0
-      tangentMode: 0
-      weightedMode: 0
-      inWeight: 0
-      outWeight: 0
-    - serializedVersion: 3
-      time: 1
-      value: 1
-      inSlope: 0
-      outSlope: 0
-      tangentMode: 0
-      weightedMode: 0
-      inWeight: 0
-      outWeight: 0
-    m_PreInfinity: 2
-    m_PostInfinity: 2
-    m_RotationOrder: 4
-  loopType: 0
-  loops: 1
-  id: 1-2-1_1
-  isRelative: 0
-  isFrom: 0
-  isIndependentUpdate: 0
-  autoKill: 1
-  autoGenerate: 1
-  isActive: 1
-  isValid: 1
-  target: {fileID: 1249804474}
-  animationType: 1
-  targetType: 8
-  forcedTargetType: 0
-  autoPlay: 0
-  useTargetAsV3: 1
-  endValueFloat: 0
-  endValueV3: {x: 7.65, y: 33.322, z: -24.527}
-  endValueV2: {x: 0, y: 0}
-  endValueColor: {r: 1, g: 1, b: 1, a: 1}
-  endValueString: 
-  endValueRect:
-    serializedVersion: 2
-    x: 0
-    y: 0
-    width: 0
-    height: 0
-  endValueTransform: {fileID: 888529202}
-  optionalBool0: 0
-  optionalBool1: 0
-  optionalFloat0: 0
-  optionalInt0: 0
-  optionalRotationMode: 0
-  optionalScrambleMode: 0
-  optionalShakeRandomnessMode: 0
-  optionalString: 
 --- !u!1 &947192235
 GameObject:
   m_ObjectHideFlags: 0
@@ -2633,7 +2480,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 975088014}
-  - component: {fileID: 975088015}
   m_Layer: 0
   m_Name: 1-2-1 (5)
   m_TagString: Untagged
@@ -2650,132 +2496,12 @@ Transform:
   m_GameObject: {fileID: 975088013}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 1.21, y: -1.864, z: 65.35}
+  m_LocalPosition: {x: 1.21, y: -1.2, z: 65.35}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 1935156203}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &975088015
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 975088013}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 4d0390bd8b8ffd640b34fe25065ff1df, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  updateType: 0
-  isSpeedBased: 1
-  hasOnStart: 0
-  hasOnPlay: 0
-  hasOnUpdate: 0
-  hasOnStepComplete: 0
-  hasOnComplete: 1
-  hasOnTweenCreated: 0
-  hasOnRewind: 0
-  onStart:
-    m_PersistentCalls:
-      m_Calls: []
-  onPlay:
-    m_PersistentCalls:
-      m_Calls: []
-  onUpdate:
-    m_PersistentCalls:
-      m_Calls: []
-  onStepComplete:
-    m_PersistentCalls:
-      m_Calls: []
-  onComplete:
-    m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 458538030}
-        m_TargetAssemblyTypeName: DG.Tweening.DOTweenAnimation, Assembly-CSharp-firstpass
-        m_MethodName: DORestart
-        m_Mode: 1
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
-  onTweenCreated:
-    m_PersistentCalls:
-      m_Calls: []
-  onRewind:
-    m_PersistentCalls:
-      m_Calls: []
-  targetIsSelf: 0
-  targetGO: {fileID: 1249804469}
-  tweenTargetIsTargetGO: 1
-  delay: 0
-  duration: 3
-  easeType: 6
-  easeCurve:
-    serializedVersion: 2
-    m_Curve:
-    - serializedVersion: 3
-      time: 0
-      value: 0
-      inSlope: 0
-      outSlope: 0
-      tangentMode: 0
-      weightedMode: 0
-      inWeight: 0
-      outWeight: 0
-    - serializedVersion: 3
-      time: 1
-      value: 1
-      inSlope: 0
-      outSlope: 0
-      tangentMode: 0
-      weightedMode: 0
-      inWeight: 0
-      outWeight: 0
-    m_PreInfinity: 2
-    m_PostInfinity: 2
-    m_RotationOrder: 4
-  loopType: 0
-  loops: 1
-  id: 1-2-1_5
-  isRelative: 0
-  isFrom: 0
-  isIndependentUpdate: 0
-  autoKill: 1
-  autoGenerate: 1
-  isActive: 1
-  isValid: 1
-  target: {fileID: 1249804474}
-  animationType: 1
-  targetType: 8
-  forcedTargetType: 0
-  autoPlay: 0
-  useTargetAsV3: 1
-  endValueFloat: 0
-  endValueV3: {x: -0.26999998, y: 32.436, z: 27.342999}
-  endValueV2: {x: 0, y: 0}
-  endValueColor: {r: 1, g: 1, b: 1, a: 1}
-  endValueString: 
-  endValueRect:
-    serializedVersion: 2
-    x: 0
-    y: 0
-    width: 0
-    height: 0
-  endValueTransform: {fileID: 975088014}
-  optionalBool0: 0
-  optionalBool1: 0
-  optionalFloat0: 0
-  optionalInt0: 0
-  optionalRotationMode: 0
-  optionalScrambleMode: 0
-  optionalShakeRandomnessMode: 0
-  optionalString: 
 --- !u!1 &1073009833
 GameObject:
   m_ObjectHideFlags: 0
@@ -2823,43 +2549,9 @@ MonoBehaviour:
   cutName: "Day1 \uC0C8\uBCBD"
   description: "\uBE44\uD589\uC120 \uAC11\uD310"
   cutDuration: 0
-  waitForPlayerInputBeforeStart: 0
-  waitForPlayerInputBeforeEnd: 1
+  waitBeforeStart: 0
+  waitBeforeEnd: 0
   startEvents:
-  - eventName: "\uD50C\uB808\uC774\uC5B4 \uC774\uB3D9"
-    description: "Chapter01Waypoints \uCC38\uACE0"
-    delay: 0
-    waitAfterExecution: 0
-    eventType: 0
-    onEventExecute:
-      m_PersistentCalls:
-        m_Calls:
-        - m_Target: {fileID: 1974959357}
-          m_TargetAssemblyTypeName: DG.Tweening.DOTweenAnimation, Assembly-CSharp-firstpass
-          m_MethodName: DORestart
-          m_Mode: 1
-          m_Arguments:
-            m_ObjectArgument: {fileID: 0}
-            m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-            m_IntArgument: 0
-            m_FloatArgument: 0
-            m_StringArgument: 
-            m_BoolArgument: 0
-          m_CallState: 2
-    managerMethodName: 
-    parameters: []
-    animationClip: {fileID: 0}
-    targetActorId: 
-    audioClip: {fileID: 0}
-    audioPlayType: 0
-    enableController: 0
-    enableMovement: 0
-    teleportPosition: {x: 0, y: 0, z: 0}
-    shouldTeleport: 0
-    waypoints: []
-    singleDestination: {x: 0, y: 0, z: 0}
-    useWaypoints: 0
-  middleEvents:
   - eventName: "\uC12C \uC774\uB3D9"
     description: 
     delay: 0
@@ -2886,14 +2578,162 @@ MonoBehaviour:
     targetActorId: 
     audioClip: {fileID: 0}
     audioPlayType: 0
-    enableController: 0
-    enableMovement: 0
+    loopAudio: 0
+    enablePlayerControl: 0
     teleportPosition: {x: 0, y: 0, z: 0}
     shouldTeleport: 0
-    waypoints: []
-    singleDestination: {x: 0, y: 0, z: 0}
-    useWaypoints: 0
+  - eventName: "\uD50C\uB808\uC774\uC5B4 \uC774\uB3D9"
+    description: "\uBB38 \uC55E\uC73C\uB85C \uC774\uB3D9"
+    delay: 0
+    waitAfterExecution: 0
+    eventType: 0
+    onEventExecute:
+      m_PersistentCalls:
+        m_Calls:
+        - m_Target: {fileID: 1974959357}
+          m_TargetAssemblyTypeName: DG.Tweening.DOTweenAnimation, Assembly-CSharp-firstpass
+          m_MethodName: DORestart
+          m_Mode: 1
+          m_Arguments:
+            m_ObjectArgument: {fileID: 0}
+            m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+            m_IntArgument: 0
+            m_FloatArgument: 0
+            m_StringArgument: 
+            m_BoolArgument: 0
+          m_CallState: 2
+    managerMethodName: 
+    parameters: []
+    animationClip: {fileID: 0}
+    targetActorId: 
+    audioClip: {fileID: 0}
+    audioPlayType: 0
+    loopAudio: 0
+    enablePlayerControl: 0
+    teleportPosition: {x: 0, y: 0, z: 0}
+    shouldTeleport: 0
+  - eventName: "\uBC30\uACBD\uC74C\uC545 \uBCC0\uACBD"
+    description: "\uBE44\uD589\uC120 \uC18C\uB9AC"
+    delay: 0
+    waitAfterExecution: 0
+    eventType: 3
+    onEventExecute:
+      m_PersistentCalls:
+        m_Calls: []
+    managerMethodName: 
+    parameters: []
+    animationClip: {fileID: 0}
+    targetActorId: 
+    audioClip: {fileID: 8300000, guid: 2fbec347ed4f07749a814babec3399ff, type: 3}
+    audioPlayType: 1
+    loopAudio: 0
+    enablePlayerControl: 1
+    teleportPosition: {x: 0, y: 0, z: 0}
+    shouldTeleport: 0
+  - eventName: "\uD6A8\uACFC\uC74C \uCD94\uAC00"
+    description: "\uBC1C\uAC78\uC74C"
+    delay: 0
+    waitAfterExecution: 4
+    eventType: 3
+    onEventExecute:
+      m_PersistentCalls:
+        m_Calls: []
+    managerMethodName: 
+    parameters: []
+    animationClip: {fileID: 0}
+    targetActorId: 
+    audioClip: {fileID: 8300000, guid: c09edb5c4388a03468433a80dde937bc, type: 3}
+    audioPlayType: 2
+    loopAudio: 0
+    enablePlayerControl: 0
+    teleportPosition: {x: 0, y: 0, z: 0}
+    shouldTeleport: 0
+  - eventName: "\uD6A8\uACFC\uC74C \uC81C\uAC70"
+    description: "\uBC1C\uAC78\uC74C"
+    delay: 0
+    waitAfterExecution: 0
+    eventType: 0
+    onEventExecute:
+      m_PersistentCalls:
+        m_Calls:
+        - m_Target: {fileID: 1204541969}
+          m_TargetAssemblyTypeName: TheFeelies.Managers.SoundManager, Assembly-CSharp
+          m_MethodName: StopSFX
+          m_Mode: 1
+          m_Arguments:
+            m_ObjectArgument: {fileID: 0}
+            m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+            m_IntArgument: 0
+            m_FloatArgument: 0
+            m_StringArgument: 
+            m_BoolArgument: 0
+          m_CallState: 2
+    managerMethodName: 
+    parameters: []
+    animationClip: {fileID: 0}
+    targetActorId: 
+    audioClip: {fileID: 0}
+    audioPlayType: 2
+    loopAudio: 0
+    enablePlayerControl: 0
+    teleportPosition: {x: 0, y: 0, z: 0}
+    shouldTeleport: 0
+  middleEvents:
+  - eventName: "\uD50C\uB808\uC774\uC5B4 \uC774\uB3D9"
+    description: "Chapter01WayPoints \uCC38\uACE0"
+    delay: 0
+    waitAfterExecution: 0
+    eventType: 0
+    onEventExecute:
+      m_PersistentCalls:
+        m_Calls:
+        - m_Target: {fileID: 888529203}
+          m_TargetAssemblyTypeName: DotweenPathMover, Assembly-CSharp
+          m_MethodName: PlayPath
+          m_Mode: 1
+          m_Arguments:
+            m_ObjectArgument: {fileID: 0}
+            m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+            m_IntArgument: 0
+            m_FloatArgument: 0
+            m_StringArgument: 
+            m_BoolArgument: 0
+          m_CallState: 2
+    managerMethodName: 
+    parameters: []
+    animationClip: {fileID: 0}
+    targetActorId: 
+    audioClip: {fileID: 0}
+    audioPlayType: 0
+    loopAudio: 0
+    enablePlayerControl: 0
+    teleportPosition: {x: 0, y: 0, z: 0}
+    shouldTeleport: 0
+  - eventName: "\uD6A8\uACFC\uC74C \uC7AC\uC0DD"
+    description: "\uBC1C\uAC78\uC74C"
+    delay: 0
+    waitAfterExecution: 0
+    eventType: 3
+    onEventExecute:
+      m_PersistentCalls:
+        m_Calls: []
+    managerMethodName: 
+    parameters: []
+    animationClip: {fileID: 0}
+    targetActorId: 
+    audioClip: {fileID: 8300000, guid: c09edb5c4388a03468433a80dde937bc, type: 3}
+    audioPlayType: 2
+    loopAudio: 1
+    enablePlayerControl: 0
+    teleportPosition: {x: 0, y: 0, z: 0}
+    shouldTeleport: 0
   endEvents: []
+--- !u!4 &1144020299 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 7942002211881670212, guid: a5226a72c9553294abfe172a458b5805,
+    type: 3}
+  m_PrefabInstance: {fileID: 1456328862}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &1172511836
 GameObject:
   m_ObjectHideFlags: 0
@@ -2903,7 +2743,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1172511837}
-  - component: {fileID: 1172511838}
   m_Layer: 0
   m_Name: 1-2-1 (3)
   m_TagString: Untagged
@@ -2920,132 +2759,12 @@ Transform:
   m_GameObject: {fileID: 1172511836}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 9.13, y: -4.6, z: 49.52}
+  m_LocalPosition: {x: 9.13, y: -4.6, z: 48.81}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 1935156203}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &1172511838
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1172511836}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 4d0390bd8b8ffd640b34fe25065ff1df, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  updateType: 0
-  isSpeedBased: 1
-  hasOnStart: 0
-  hasOnPlay: 0
-  hasOnUpdate: 0
-  hasOnStepComplete: 0
-  hasOnComplete: 1
-  hasOnTweenCreated: 0
-  hasOnRewind: 0
-  onStart:
-    m_PersistentCalls:
-      m_Calls: []
-  onPlay:
-    m_PersistentCalls:
-      m_Calls: []
-  onUpdate:
-    m_PersistentCalls:
-      m_Calls: []
-  onStepComplete:
-    m_PersistentCalls:
-      m_Calls: []
-  onComplete:
-    m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 1321330782}
-        m_TargetAssemblyTypeName: DG.Tweening.DOTweenAnimation, Assembly-CSharp-firstpass
-        m_MethodName: DORestart
-        m_Mode: 1
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
-  onTweenCreated:
-    m_PersistentCalls:
-      m_Calls: []
-  onRewind:
-    m_PersistentCalls:
-      m_Calls: []
-  targetIsSelf: 0
-  targetGO: {fileID: 1249804469}
-  tweenTargetIsTargetGO: 1
-  delay: 0
-  duration: 3
-  easeType: 6
-  easeCurve:
-    serializedVersion: 2
-    m_Curve:
-    - serializedVersion: 3
-      time: 0
-      value: 0
-      inSlope: 0
-      outSlope: 0
-      tangentMode: 0
-      weightedMode: 0
-      inWeight: 0
-      outWeight: 0
-    - serializedVersion: 3
-      time: 1
-      value: 1
-      inSlope: 0
-      outSlope: 0
-      tangentMode: 0
-      weightedMode: 0
-      inWeight: 0
-      outWeight: 0
-    m_PreInfinity: 2
-    m_PostInfinity: 2
-    m_RotationOrder: 4
-  loopType: 0
-  loops: 1
-  id: 1-2-1_3
-  isRelative: 0
-  isFrom: 0
-  isIndependentUpdate: 0
-  autoKill: 1
-  autoGenerate: 1
-  isActive: 1
-  isValid: 1
-  target: {fileID: 1249804474}
-  animationType: 1
-  targetType: 8
-  forcedTargetType: 0
-  autoPlay: 0
-  useTargetAsV3: 1
-  endValueFloat: 0
-  endValueV3: {x: 7.65, y: 29.699999, z: 11.5130005}
-  endValueV2: {x: 0, y: 0}
-  endValueColor: {r: 1, g: 1, b: 1, a: 1}
-  endValueString: 
-  endValueRect:
-    serializedVersion: 2
-    x: 0
-    y: 0
-    width: 0
-    height: 0
-  endValueTransform: {fileID: 1172511837}
-  optionalBool0: 0
-  optionalBool1: 0
-  optionalFloat0: 0
-  optionalInt0: 0
-  optionalRotationMode: 0
-  optionalScrambleMode: 0
-  optionalShakeRandomnessMode: 0
-  optionalString: 
 --- !u!1 &1204541967
 GameObject:
   m_ObjectHideFlags: 0
@@ -3097,7 +2816,7 @@ MonoBehaviour:
   sfxSource: {fileID: 2146855918}
   dialogSource: {fileID: 1971008304}
   masterVolume: 1
-  musicVolume: 0.5
+  musicVolume: 0.25
   sfxVolume: 0.6
   dialogVolume: 1
 --- !u!1 &1249804469 stripped
@@ -3124,6 +2843,12 @@ Rigidbody:
     type: 3}
   m_PrefabInstance: {fileID: 1456328862}
   m_PrefabAsset: {fileID: 0}
+--- !u!4 &1249804478 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 6707951067419483823, guid: a5226a72c9553294abfe172a458b5805,
+    type: 3}
+  m_PrefabInstance: {fileID: 1456328862}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &1321330780
 GameObject:
   m_ObjectHideFlags: 0
@@ -3133,7 +2858,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1321330781}
-  - component: {fileID: 1321330782}
   m_Layer: 0
   m_Name: 1-2-1 (4)
   m_TagString: Untagged
@@ -3150,132 +2874,12 @@ Transform:
   m_GameObject: {fileID: 1321330780}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 9.13, y: -1.864, z: 55.59}
+  m_LocalPosition: {x: 9.13, y: -1.2, z: 55.59}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 1935156203}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &1321330782
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1321330780}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 4d0390bd8b8ffd640b34fe25065ff1df, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  updateType: 0
-  isSpeedBased: 1
-  hasOnStart: 0
-  hasOnPlay: 0
-  hasOnUpdate: 0
-  hasOnStepComplete: 0
-  hasOnComplete: 1
-  hasOnTweenCreated: 0
-  hasOnRewind: 0
-  onStart:
-    m_PersistentCalls:
-      m_Calls: []
-  onPlay:
-    m_PersistentCalls:
-      m_Calls: []
-  onUpdate:
-    m_PersistentCalls:
-      m_Calls: []
-  onStepComplete:
-    m_PersistentCalls:
-      m_Calls: []
-  onComplete:
-    m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 975088015}
-        m_TargetAssemblyTypeName: DG.Tweening.DOTweenAnimation, Assembly-CSharp-firstpass
-        m_MethodName: DORestart
-        m_Mode: 1
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
-  onTweenCreated:
-    m_PersistentCalls:
-      m_Calls: []
-  onRewind:
-    m_PersistentCalls:
-      m_Calls: []
-  targetIsSelf: 0
-  targetGO: {fileID: 1249804469}
-  tweenTargetIsTargetGO: 1
-  delay: 0
-  duration: 3
-  easeType: 6
-  easeCurve:
-    serializedVersion: 2
-    m_Curve:
-    - serializedVersion: 3
-      time: 0
-      value: 0
-      inSlope: 0
-      outSlope: 0
-      tangentMode: 0
-      weightedMode: 0
-      inWeight: 0
-      outWeight: 0
-    - serializedVersion: 3
-      time: 1
-      value: 1
-      inSlope: 0
-      outSlope: 0
-      tangentMode: 0
-      weightedMode: 0
-      inWeight: 0
-      outWeight: 0
-    m_PreInfinity: 2
-    m_PostInfinity: 2
-    m_RotationOrder: 4
-  loopType: 0
-  loops: 1
-  id: 1-2-1_4
-  isRelative: 0
-  isFrom: 0
-  isIndependentUpdate: 0
-  autoKill: 1
-  autoGenerate: 1
-  isActive: 1
-  isValid: 1
-  target: {fileID: 1249804474}
-  animationType: 1
-  targetType: 8
-  forcedTargetType: 0
-  autoPlay: 0
-  useTargetAsV3: 1
-  endValueFloat: 0
-  endValueV3: {x: 7.65, y: 32.436, z: 17.583}
-  endValueV2: {x: 0, y: 0}
-  endValueColor: {r: 1, g: 1, b: 1, a: 1}
-  endValueString: 
-  endValueRect:
-    serializedVersion: 2
-    x: 0
-    y: 0
-    width: 0
-    height: 0
-  endValueTransform: {fileID: 1321330781}
-  optionalBool0: 0
-  optionalBool1: 0
-  optionalFloat0: 0
-  optionalInt0: 0
-  optionalRotationMode: 0
-  optionalScrambleMode: 0
-  optionalShakeRandomnessMode: 0
-  optionalString: 
 --- !u!1 &1339381220
 GameObject:
   m_ObjectHideFlags: 0
@@ -3348,7 +2952,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1454333048}
-  - component: {fileID: 1454333049}
   m_Layer: 0
   m_Name: 1-2-1 (7)
   m_TagString: Untagged
@@ -3365,132 +2968,12 @@ Transform:
   m_GameObject: {fileID: 1454333047}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 3.87, y: 0.145, z: 85.81}
+  m_LocalPosition: {x: 6.75, y: 0.2, z: 84.32}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 1935156203}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &1454333049
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1454333047}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 4d0390bd8b8ffd640b34fe25065ff1df, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  updateType: 0
-  isSpeedBased: 1
-  hasOnStart: 0
-  hasOnPlay: 0
-  hasOnUpdate: 0
-  hasOnStepComplete: 0
-  hasOnComplete: 1
-  hasOnTweenCreated: 0
-  hasOnRewind: 0
-  onStart:
-    m_PersistentCalls:
-      m_Calls: []
-  onPlay:
-    m_PersistentCalls:
-      m_Calls: []
-  onUpdate:
-    m_PersistentCalls:
-      m_Calls: []
-  onStepComplete:
-    m_PersistentCalls:
-      m_Calls: []
-  onComplete:
-    m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 1073009835}
-        m_TargetAssemblyTypeName: TheFeelies.Core.Cut, Assembly-CSharp
-        m_MethodName: OnPlayerInputBeforeEnd
-        m_Mode: 1
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
-  onTweenCreated:
-    m_PersistentCalls:
-      m_Calls: []
-  onRewind:
-    m_PersistentCalls:
-      m_Calls: []
-  targetIsSelf: 0
-  targetGO: {fileID: 1249804469}
-  tweenTargetIsTargetGO: 1
-  delay: 0
-  duration: 3
-  easeType: 6
-  easeCurve:
-    serializedVersion: 2
-    m_Curve:
-    - serializedVersion: 3
-      time: 0
-      value: 0
-      inSlope: 0
-      outSlope: 0
-      tangentMode: 0
-      weightedMode: 0
-      inWeight: 0
-      outWeight: 0
-    - serializedVersion: 3
-      time: 1
-      value: 1
-      inSlope: 0
-      outSlope: 0
-      tangentMode: 0
-      weightedMode: 0
-      inWeight: 0
-      outWeight: 0
-    m_PreInfinity: 2
-    m_PostInfinity: 2
-    m_RotationOrder: 4
-  loopType: 0
-  loops: 1
-  id: 1-2-1_7
-  isRelative: 0
-  isFrom: 0
-  isIndependentUpdate: 0
-  autoKill: 1
-  autoGenerate: 1
-  isActive: 1
-  isValid: 1
-  target: {fileID: 1249804474}
-  animationType: 1
-  targetType: 8
-  forcedTargetType: 0
-  autoPlay: 0
-  useTargetAsV3: 1
-  endValueFloat: 0
-  endValueV3: {x: -0.26999998, y: 34.445, z: 32.423}
-  endValueV2: {x: 0, y: 0}
-  endValueColor: {r: 1, g: 1, b: 1, a: 1}
-  endValueString: 
-  endValueRect:
-    serializedVersion: 2
-    x: 0
-    y: 0
-    width: 0
-    height: 0
-  endValueTransform: {fileID: 1454333048}
-  optionalBool0: 0
-  optionalBool1: 0
-  optionalFloat0: 0
-  optionalInt0: 0
-  optionalRotationMode: 0
-  optionalScrambleMode: 0
-  optionalShakeRandomnessMode: 0
-  optionalString: 
 --- !u!1001 &1456328862
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -3505,13 +2988,43 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1639125106728771988, guid: a5226a72c9553294abfe172a458b5805,
         type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1639125106728771988, guid: a5226a72c9553294abfe172a458b5805,
+        type: 3}
       propertyPath: m_TagString
       value: GameController
       objectReference: {fileID: 0}
     - target: {fileID: 1639125108242449863, guid: a5226a72c9553294abfe172a458b5805,
         type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1639125108242449863, guid: a5226a72c9553294abfe172a458b5805,
+        type: 3}
       propertyPath: m_TagString
       value: GameController
+      objectReference: {fileID: 0}
+    - target: {fileID: 3036845310078267546, guid: a5226a72c9553294abfe172a458b5805,
+        type: 3}
+      propertyPath: m_Enabled
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 3036845310779299017, guid: a5226a72c9553294abfe172a458b5805,
+        type: 3}
+      propertyPath: m_Enabled
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6495658002355149892, guid: a5226a72c9553294abfe172a458b5805,
+        type: 3}
+      propertyPath: m_Enabled
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6495658003868710935, guid: a5226a72c9553294abfe172a458b5805,
+        type: 3}
+      propertyPath: m_Enabled
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 6707951067419483808, guid: a5226a72c9553294abfe172a458b5805,
         type: 3}
@@ -3676,8 +3189,8 @@ MonoBehaviour:
   cutName: "Day1 \uC0C8\uBCBD"
   description: "\uC120\uC2E4 \uB0B4\uBD80"
   cutDuration: 0
-  waitForPlayerInputBeforeStart: 0
-  waitForPlayerInputBeforeEnd: 0
+  waitBeforeStart: 0
+  waitBeforeEnd: 0
   startEvents:
   - eventName: "\uD50C\uB808\uC774\uC5B4 \uC870\uC791 \uD574\uC81C"
     description: 
@@ -3693,13 +3206,28 @@ MonoBehaviour:
     targetActorId: 
     audioClip: {fileID: 0}
     audioPlayType: 0
-    enableController: 0
-    enableMovement: 0
+    loopAudio: 0
+    enablePlayerControl: 0
     teleportPosition: {x: 0, y: 0, z: 0}
     shouldTeleport: 0
-    waypoints: []
-    singleDestination: {x: 0, y: 0, z: 0}
-    useWaypoints: 0
+  - eventName: "\uBC30\uACBD\uC74C\uC545"
+    description: "\uC99D\uAE30"
+    delay: 0
+    waitAfterExecution: 0
+    eventType: 3
+    onEventExecute:
+      m_PersistentCalls:
+        m_Calls: []
+    managerMethodName: 
+    parameters: []
+    animationClip: {fileID: 0}
+    targetActorId: 
+    audioClip: {fileID: 8300000, guid: 1bb312971e0386c48b0000b15b5e647e, type: 3}
+    audioPlayType: 1
+    loopAudio: 0
+    enablePlayerControl: 1
+    teleportPosition: {x: 0, y: 0, z: 0}
+    shouldTeleport: 0
   middleEvents:
   - eventName: "\uAC70\uC6B8 \uBFCC\uC608\uC9C0\uB294 \uD6A8\uACFC \uCD94\uAC00"
     description: 
@@ -3727,13 +3255,10 @@ MonoBehaviour:
     targetActorId: 
     audioClip: {fileID: 0}
     audioPlayType: 0
-    enableController: 0
-    enableMovement: 0
+    loopAudio: 0
+    enablePlayerControl: 1
     teleportPosition: {x: 0, y: 0, z: 0}
     shouldTeleport: 0
-    waypoints: []
-    singleDestination: {x: 0, y: 0, z: 0}
-    useWaypoints: 0
   endEvents:
   - eventName: "\uD50C\uB808\uC774\uC5B4 \uC870\uC791 \uBCF5\uADC0"
     description: 
@@ -3749,13 +3274,10 @@ MonoBehaviour:
     targetActorId: 
     audioClip: {fileID: 0}
     audioPlayType: 0
-    enableController: 1
-    enableMovement: 0
+    loopAudio: 0
+    enablePlayerControl: 1
     teleportPosition: {x: 0, y: 0, z: 0}
     shouldTeleport: 0
-    waypoints: []
-    singleDestination: {x: 0, y: 0, z: 0}
-    useWaypoints: 0
 --- !u!1 &1676390133
 GameObject:
   m_ObjectHideFlags: 0
@@ -3874,6 +3396,124 @@ GameObject:
     type: 3}
   m_PrefabInstance: {fileID: 1456328862}
   m_PrefabAsset: {fileID: 0}
+--- !u!21 &1873764167
+Material:
+  serializedVersion: 8
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: ShelockMirror (Instance) (Instance) (Instance) (Instance)
+  m_Shader: {fileID: 4800000, guid: 933532a4fcc9baf4fa0491de14d08ed7, type: 3}
+  m_Parent: {fileID: 0}
+  m_ModifiedSerializedProperties: 0
+  m_ValidKeywords: []
+  m_InvalidKeywords: []
+  m_LightmapFlags: 6
+  m_EnableInstancingVariants: 0
+  m_DoubleSidedGI: 0
+  m_CustomRenderQueue: 2000
+  stringTagMap:
+    RenderType: Opaque
+  disabledShaderPasses: []
+  m_LockedProperties: 
+  m_SavedProperties:
+    serializedVersion: 3
+    m_TexEnvs:
+    - _BaseMap:
+        m_Texture: {fileID: 2800000, guid: d8ebea8c302de6e498a0e2044ff1c790, type: 3}
+        m_Scale: {x: 2, y: 2}
+        m_Offset: {x: -0.05, y: -1}
+    - _BumpMap:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _DetailAlbedoMap:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _DetailMask:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _DetailNormalMap:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _EmissionMap:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _MainTex:
+        m_Texture: {fileID: 2800000, guid: d8ebea8c302de6e498a0e2044ff1c790, type: 3}
+        m_Scale: {x: 2, y: 2}
+        m_Offset: {x: -0.05, y: -1}
+    - _MetallicGlossMap:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _OcclusionMap:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _ParallaxMap:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _SpecGlossMap:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - unity_Lightmaps:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - unity_LightmapsInd:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - unity_ShadowMasks:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    m_Ints: []
+    m_Floats:
+    - _AlphaClip: 0
+    - _AlphaToMask: 0
+    - _Blend: 0
+    - _BlendModePreserveSpecular: 1
+    - _BumpScale: 1
+    - _ClearCoatMask: 0
+    - _ClearCoatSmoothness: 0
+    - _Cull: 2
+    - _Cutoff: 0.5
+    - _DetailAlbedoMapScale: 1
+    - _DetailNormalMapScale: 1
+    - _DstBlend: 0
+    - _DstBlendAlpha: 0
+    - _EnvironmentReflections: 1
+    - _GlossMapScale: 0
+    - _Glossiness: 0
+    - _GlossyReflections: 0
+    - _Metallic: 0
+    - _OcclusionStrength: 1
+    - _Parallax: 0.005
+    - _QueueOffset: 0
+    - _ReceiveShadows: 1
+    - _Smoothness: 0.5
+    - _SmoothnessTextureChannel: 0
+    - _SpecularHighlights: 1
+    - _SrcBlend: 1
+    - _SrcBlendAlpha: 1
+    - _Surface: 0
+    - _WorkflowMode: 1
+    - _ZWrite: 1
+    m_Colors:
+    - _BaseColor: {r: 1, g: 1, b: 1, a: 1}
+    - _Color: {r: 1, g: 1, b: 1, a: 1}
+    - _EmissionColor: {r: 0, g: 0, b: 0, a: 1}
+    - _SpecColor: {r: 0.19999996, g: 0.19999996, b: 0.19999996, a: 1}
+  m_BuildTextureStacks: []
 --- !u!1 &1892335369
 GameObject:
   m_ObjectHideFlags: 0
@@ -4043,20 +3683,20 @@ MonoBehaviour:
   cutName: "Day1 \uC0C8\uBCBD"
   description: "\uC120\uC2E4 \uB0B4\uBD80 \uBB38 \uC55E"
   cutDuration: 0
-  waitForPlayerInputBeforeStart: 0
-  waitForPlayerInputBeforeEnd: 0
+  waitBeforeStart: 0
+  waitBeforeEnd: 0
   startEvents:
   - eventName: "\uBB38 \uB4A4\uCABD\uC73C\uB85C \uD50C\uB808\uC774\uC5B4 \uBB3C\uB7EC\uC11C\uAE30"
     description: 
     delay: 0
-    waitAfterExecution: 0
+    waitAfterExecution: 5
     eventType: 0
     onEventExecute:
       m_PersistentCalls:
         m_Calls:
-        - m_Target: {fileID: 0}
+        - m_Target: {fileID: 588887919}
           m_TargetAssemblyTypeName: DG.Tweening.DOTweenAnimation, Assembly-CSharp-firstpass
-          m_MethodName: DORestart
+          m_MethodName: DOPlay
           m_Mode: 1
           m_Arguments:
             m_ObjectArgument: {fileID: 0}
@@ -4072,19 +3712,34 @@ MonoBehaviour:
     targetActorId: 
     audioClip: {fileID: 0}
     audioPlayType: 0
-    enableController: 0
-    enableMovement: 0
+    loopAudio: 0
+    enablePlayerControl: 0
     teleportPosition: {x: 0, y: 0, z: 0}
     shouldTeleport: 0
-    waypoints: []
-    singleDestination: {x: 0, y: 0, z: 0}
-    useWaypoints: 0
   middleEvents: []
   endEvents:
+  - eventName: "\uD6A8\uACFC\uC74C \uCD94\uAC00"
+    description: "\uBB38\uC5F4\uB9AC\uB294 \uC18C\uB9AC"
+    delay: 0
+    waitAfterExecution: 0
+    eventType: 3
+    onEventExecute:
+      m_PersistentCalls:
+        m_Calls: []
+    managerMethodName: 
+    parameters: []
+    animationClip: {fileID: 0}
+    targetActorId: 
+    audioClip: {fileID: 8300000, guid: 733ec9e80087abf4286b7f34017b2c5f, type: 3}
+    audioPlayType: 2
+    loopAudio: 0
+    enablePlayerControl: 1
+    teleportPosition: {x: 0, y: 0, z: 0}
+    shouldTeleport: 0
   - eventName: "\uBB38 \uC5F4\uB9AC\uB294 \uC774\uBCA4\uD2B8"
     description: 
-    delay: 3
-    waitAfterExecution: 0
+    delay: 0
+    waitAfterExecution: 3
     eventType: 0
     onEventExecute:
       m_PersistentCalls:
@@ -4107,13 +3762,10 @@ MonoBehaviour:
     targetActorId: 
     audioClip: {fileID: 0}
     audioPlayType: 0
-    enableController: 0
-    enableMovement: 0
+    loopAudio: 0
+    enablePlayerControl: 1
     teleportPosition: {x: 0, y: 0, z: 0}
     shouldTeleport: 0
-    waypoints: []
-    singleDestination: {x: 0, y: 0, z: 0}
-    useWaypoints: 0
 --- !u!4 &1914023455
 Transform:
   m_ObjectHideFlags: 0
@@ -4323,7 +3975,7 @@ Transform:
   m_GameObject: {fileID: 1974959355}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0.099, y: -0.978, z: 6.21}
+  m_LocalPosition: {x: 0.099, y: -0.8, z: 8.47}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -4342,12 +3994,12 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   updateType: 0
-  isSpeedBased: 1
+  isSpeedBased: 0
   hasOnStart: 0
   hasOnPlay: 0
   hasOnUpdate: 0
   hasOnStepComplete: 0
-  hasOnComplete: 1
+  hasOnComplete: 0
   hasOnTweenCreated: 0
   hasOnRewind: 0
   onStart:
@@ -4364,19 +4016,7 @@ MonoBehaviour:
       m_Calls: []
   onComplete:
     m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 888529203}
-        m_TargetAssemblyTypeName: DG.Tweening.DOTweenAnimation, Assembly-CSharp-firstpass
-        m_MethodName: DORestart
-        m_Mode: 1
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
+      m_Calls: []
   onTweenCreated:
     m_PersistentCalls:
       m_Calls: []
@@ -4385,7 +4025,7 @@ MonoBehaviour:
       m_Calls: []
   targetIsSelf: 0
   targetGO: {fileID: 1249804469}
-  tweenTargetIsTargetGO: 1
+  tweenTargetIsTargetGO: 0
   delay: 0
   duration: 3
   easeType: 6
@@ -4415,7 +4055,7 @@ MonoBehaviour:
     m_RotationOrder: 4
   loopType: 0
   loops: 1
-  id: 1-2-1_0
+  id: 
   isRelative: 0
   isFrom: 0
   isIndependentUpdate: 0
@@ -4430,7 +4070,7 @@ MonoBehaviour:
   autoPlay: 0
   useTargetAsV3: 1
   endValueFloat: 0
-  endValueV3: {x: -1.381, y: 33.322, z: -31.797}
+  endValueV3: {x: 0, y: 0, z: 0}
   endValueV2: {x: 0, y: 0}
   endValueColor: {r: 1, g: 1, b: 1, a: 1}
   endValueString: 
@@ -4505,14 +4145,10 @@ MonoBehaviour:
   - {fileID: 159883444}
   - {fileID: 2023634071}
   controllerFadeDuration: 2
-  movementObjects: []
-  walkSpeed: 2
-  rotationSpeed: 5
   isMovementEnabled: 1
-  isInteractionEnabled: 1
   isControllerEnabled: 1
-  isAutoMoving: 0
   isControllerFading: 0
+  enableHaptics: 1
 --- !u!114 &2023634071 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 1262313376109179214, guid: a5226a72c9553294abfe172a458b5805,
@@ -4654,124 +4290,6 @@ MonoBehaviour:
   optionalScrambleMode: 0
   optionalShakeRandomnessMode: 0
   optionalString: 
---- !u!21 &2030791279
-Material:
-  serializedVersion: 8
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_Name: ShelockMirror (Instance) (Instance) (Instance)
-  m_Shader: {fileID: 4800000, guid: 933532a4fcc9baf4fa0491de14d08ed7, type: 3}
-  m_Parent: {fileID: 0}
-  m_ModifiedSerializedProperties: 0
-  m_ValidKeywords: []
-  m_InvalidKeywords: []
-  m_LightmapFlags: 6
-  m_EnableInstancingVariants: 0
-  m_DoubleSidedGI: 0
-  m_CustomRenderQueue: 2000
-  stringTagMap:
-    RenderType: Opaque
-  disabledShaderPasses: []
-  m_LockedProperties: 
-  m_SavedProperties:
-    serializedVersion: 3
-    m_TexEnvs:
-    - _BaseMap:
-        m_Texture: {fileID: 2800000, guid: d8ebea8c302de6e498a0e2044ff1c790, type: 3}
-        m_Scale: {x: 2, y: 2}
-        m_Offset: {x: -0.05, y: -1}
-    - _BumpMap:
-        m_Texture: {fileID: 0}
-        m_Scale: {x: 1, y: 1}
-        m_Offset: {x: 0, y: 0}
-    - _DetailAlbedoMap:
-        m_Texture: {fileID: 0}
-        m_Scale: {x: 1, y: 1}
-        m_Offset: {x: 0, y: 0}
-    - _DetailMask:
-        m_Texture: {fileID: 0}
-        m_Scale: {x: 1, y: 1}
-        m_Offset: {x: 0, y: 0}
-    - _DetailNormalMap:
-        m_Texture: {fileID: 0}
-        m_Scale: {x: 1, y: 1}
-        m_Offset: {x: 0, y: 0}
-    - _EmissionMap:
-        m_Texture: {fileID: 0}
-        m_Scale: {x: 1, y: 1}
-        m_Offset: {x: 0, y: 0}
-    - _MainTex:
-        m_Texture: {fileID: 2800000, guid: d8ebea8c302de6e498a0e2044ff1c790, type: 3}
-        m_Scale: {x: 2, y: 2}
-        m_Offset: {x: -0.05, y: -1}
-    - _MetallicGlossMap:
-        m_Texture: {fileID: 0}
-        m_Scale: {x: 1, y: 1}
-        m_Offset: {x: 0, y: 0}
-    - _OcclusionMap:
-        m_Texture: {fileID: 0}
-        m_Scale: {x: 1, y: 1}
-        m_Offset: {x: 0, y: 0}
-    - _ParallaxMap:
-        m_Texture: {fileID: 0}
-        m_Scale: {x: 1, y: 1}
-        m_Offset: {x: 0, y: 0}
-    - _SpecGlossMap:
-        m_Texture: {fileID: 0}
-        m_Scale: {x: 1, y: 1}
-        m_Offset: {x: 0, y: 0}
-    - unity_Lightmaps:
-        m_Texture: {fileID: 0}
-        m_Scale: {x: 1, y: 1}
-        m_Offset: {x: 0, y: 0}
-    - unity_LightmapsInd:
-        m_Texture: {fileID: 0}
-        m_Scale: {x: 1, y: 1}
-        m_Offset: {x: 0, y: 0}
-    - unity_ShadowMasks:
-        m_Texture: {fileID: 0}
-        m_Scale: {x: 1, y: 1}
-        m_Offset: {x: 0, y: 0}
-    m_Ints: []
-    m_Floats:
-    - _AlphaClip: 0
-    - _AlphaToMask: 0
-    - _Blend: 0
-    - _BlendModePreserveSpecular: 1
-    - _BumpScale: 1
-    - _ClearCoatMask: 0
-    - _ClearCoatSmoothness: 0
-    - _Cull: 2
-    - _Cutoff: 0.5
-    - _DetailAlbedoMapScale: 1
-    - _DetailNormalMapScale: 1
-    - _DstBlend: 0
-    - _DstBlendAlpha: 0
-    - _EnvironmentReflections: 1
-    - _GlossMapScale: 0
-    - _Glossiness: 0
-    - _GlossyReflections: 0
-    - _Metallic: 0
-    - _OcclusionStrength: 1
-    - _Parallax: 0.005
-    - _QueueOffset: 0
-    - _ReceiveShadows: 1
-    - _Smoothness: 0.5
-    - _SmoothnessTextureChannel: 0
-    - _SpecularHighlights: 1
-    - _SrcBlend: 1
-    - _SrcBlendAlpha: 1
-    - _Surface: 0
-    - _WorkflowMode: 1
-    - _ZWrite: 1
-    m_Colors:
-    - _BaseColor: {r: 1, g: 1, b: 1, a: 1}
-    - _Color: {r: 1, g: 1, b: 1, a: 1}
-    - _EmissionColor: {r: 0, g: 0, b: 0, a: 1}
-    - _SpecColor: {r: 0.19999996, g: 0.19999996, b: 0.19999996, a: 1}
-  m_BuildTextureStacks: []
 --- !u!1 &2070445328
 GameObject:
   m_ObjectHideFlags: 0
@@ -4781,7 +4299,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 2070445329}
-  - component: {fileID: 2070445330}
   m_Layer: 0
   m_Name: 1-2-1 (2)
   m_TagString: Untagged
@@ -4798,132 +4315,12 @@ Transform:
   m_GameObject: {fileID: 2070445328}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 9.13, y: -4.6, z: 20.267}
+  m_LocalPosition: {x: 9.13, y: -4.5, z: 20.99}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 1935156203}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &2070445330
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2070445328}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 4d0390bd8b8ffd640b34fe25065ff1df, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  updateType: 0
-  isSpeedBased: 1
-  hasOnStart: 0
-  hasOnPlay: 0
-  hasOnUpdate: 0
-  hasOnStepComplete: 0
-  hasOnComplete: 1
-  hasOnTweenCreated: 0
-  hasOnRewind: 0
-  onStart:
-    m_PersistentCalls:
-      m_Calls: []
-  onPlay:
-    m_PersistentCalls:
-      m_Calls: []
-  onUpdate:
-    m_PersistentCalls:
-      m_Calls: []
-  onStepComplete:
-    m_PersistentCalls:
-      m_Calls: []
-  onComplete:
-    m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 1172511838}
-        m_TargetAssemblyTypeName: DG.Tweening.DOTweenAnimation, Assembly-CSharp-firstpass
-        m_MethodName: DORestart
-        m_Mode: 1
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
-  onTweenCreated:
-    m_PersistentCalls:
-      m_Calls: []
-  onRewind:
-    m_PersistentCalls:
-      m_Calls: []
-  targetIsSelf: 0
-  targetGO: {fileID: 1249804469}
-  tweenTargetIsTargetGO: 1
-  delay: 0
-  duration: 3
-  easeType: 6
-  easeCurve:
-    serializedVersion: 2
-    m_Curve:
-    - serializedVersion: 3
-      time: 0
-      value: 0
-      inSlope: 0
-      outSlope: 0
-      tangentMode: 0
-      weightedMode: 0
-      inWeight: 0
-      outWeight: 0
-    - serializedVersion: 3
-      time: 1
-      value: 1
-      inSlope: 0
-      outSlope: 0
-      tangentMode: 0
-      weightedMode: 0
-      inWeight: 0
-      outWeight: 0
-    m_PreInfinity: 2
-    m_PostInfinity: 2
-    m_RotationOrder: 4
-  loopType: 0
-  loops: 1
-  id: 1-2-1_2
-  isRelative: 0
-  isFrom: 0
-  isIndependentUpdate: 0
-  autoKill: 1
-  autoGenerate: 1
-  isActive: 1
-  isValid: 1
-  target: {fileID: 1249804474}
-  animationType: 1
-  targetType: 8
-  forcedTargetType: 0
-  autoPlay: 0
-  useTargetAsV3: 1
-  endValueFloat: 0
-  endValueV3: {x: 7.65, y: 29.699999, z: -17.74}
-  endValueV2: {x: 0, y: 0}
-  endValueColor: {r: 1, g: 1, b: 1, a: 1}
-  endValueString: 
-  endValueRect:
-    serializedVersion: 2
-    x: 0
-    y: 0
-    width: 0
-    height: 0
-  endValueTransform: {fileID: 2070445329}
-  optionalBool0: 0
-  optionalBool1: 0
-  optionalFloat0: 0
-  optionalInt0: 0
-  optionalRotationMode: 0
-  optionalScrambleMode: 0
-  optionalShakeRandomnessMode: 0
-  optionalString: 
 --- !u!1 &2103073675
 GameObject:
   m_ObjectHideFlags: 0
@@ -5164,7 +4561,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2030791279}
+  - {fileID: 1873764167}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -5502,5 +4899,4 @@ SceneRoots:
   - {fileID: 334351161}
   - {fileID: 947192237}
   - {fileID: 1935156203}
-  - {fileID: 762062935}
   - {fileID: 81554567}
