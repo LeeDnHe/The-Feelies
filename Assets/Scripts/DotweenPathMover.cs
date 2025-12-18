@@ -13,6 +13,12 @@ public class DotweenPathMover : MonoBehaviour
     [Tooltip("이동할 오브젝트 (비어있으면 현재 오브젝트)")]
     public Transform targetObject;
     
+    [Tooltip("인스턴스로 타겟 오브젝트를 찾을지 여부")]
+    public bool useInstanceReference = false;
+    
+    [Tooltip("인스턴스로 찾을 오브젝트의 타입 이름 (예: DotweenPathMover)")]
+    public string instanceClassName = "";
+    
     [Header("경로 설정")]
     [Tooltip("이동 경로의 웨이포인트들")]
     public Transform[] waypoints;
@@ -87,6 +93,12 @@ public class DotweenPathMover : MonoBehaviour
     
     void Start()
     {
+        // 인스턴스 참조 방식으로 타겟 찾기
+        if (useInstanceReference && !string.IsNullOrEmpty(instanceClassName))
+        {
+            targetObject = FindTargetByInstanceReference();
+        }
+        
         // 타겟 오브젝트가 설정되지 않았다면 현재 오브젝트 사용
         if (targetObject == null)
         {
@@ -97,6 +109,27 @@ public class DotweenPathMover : MonoBehaviour
         {
             PlayPath();
         }
+    }
+    
+    /// <summary>
+    /// 인스턴스 참조를 통해 타겟 오브젝트 찾기
+    /// </summary>
+    private Transform FindTargetByInstanceReference()
+    {
+        // FindObjectOfType을 사용하여 해당 타입의 인스턴스 찾기
+        MonoBehaviour[] allObjects = FindObjectsOfType<MonoBehaviour>();
+        
+        foreach (var obj in allObjects)
+        {
+            if (obj.GetType().Name == instanceClassName)
+            {
+                Debug.Log($"DotweenPathMover: 인스턴스로 타겟 찾음 - {instanceClassName}");
+                return obj.transform;
+            }
+        }
+        
+        Debug.LogWarning($"DotweenPathMover: {instanceClassName} 타입의 인스턴스를 찾을 수 없습니다!");
+        return null;
     }
     
     /// <summary>

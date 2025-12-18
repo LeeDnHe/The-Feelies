@@ -2,6 +2,9 @@ using UnityEngine;
 using System.Collections.Generic;
 using DG.Tweening;
 using UnityEngine.XR;
+using System;
+using TheFeelies.Core; // PlayerDotweenMover 참조
+using TheFeelies.Events; // PlayerMovementEvents 참조
 
 namespace TheFeelies.Managers
 {
@@ -11,10 +14,9 @@ namespace TheFeelies.Managers
     /// </summary>
     public class PlayerManager : MonoBehaviour
     {
-        [Header("Player References")]
-        [SerializeField] private GameObject player; // 플레이어 오브젝트 (인스펙터에서 할당)
-        [SerializeField] private Rigidbody playerRigidbody; // 플레이어 Rigidbody (인스펙터에서 할당)
-        [SerializeField] private Autohand.AutoHandPlayer autoHandPlayer; // AutoHand 플레이어 (인스펙터에서 할당)
+    [Header("Player References")]
+    [SerializeField] private Autohand.AutoHandPlayer autoHandPlayer; // AutoHand 플레이어 (인스펙터에서 할당)
+    [SerializeField] private VRCameraViewSwitcher vrCameraViewSwitcher; // VR 카메라 뷰 전환 시스템 (인스펙터에서 할당)
         
         [Header("Controller Settings")]
         [SerializeField] private GameObject[] controllerObjects; // 시각적 컨트롤러 모델들 (알파값 페이드 대상)
@@ -29,12 +31,20 @@ namespace TheFeelies.Managers
         [Header("Haptic Settings")]
         [SerializeField] private bool enableHaptics = true;
         
+        [Header("Chapter Start Positions")]
+        [Tooltip("각 챕터의 시작 위치 Transform을 설정합니다. 빈 GameObject를 씬에 배치하고 등록하세요.")]
+        [SerializeField] private Transform[] chapterStartTransforms = new Transform[10];
+        
         private static PlayerManager instance;
         public static PlayerManager Instance => instance;
         
         // 햅틱용 디바이스 리스트
         private List<InputDevice> leftDevices = new List<InputDevice>();
         private List<InputDevice> rightDevices = new List<InputDevice>();
+        
+        // 이동 관련 이벤트 관리자 (Non-MonoBehaviour)
+        private PlayerMovementEvents _movementEvents = new PlayerMovementEvents();
+        public PlayerMovementEvents MovementEvents => _movementEvents;
         
         private void Awake()
         {
@@ -216,25 +226,94 @@ namespace TheFeelies.Managers
         /// </summary>
         public void TeleportPlayer(Vector3 position)
         {
-            if (player == null)
+            if (autoHandPlayer == null)
             {
-                Debug.LogError("Player reference is null!");
+                Debug.LogError("AutoHandPlayer reference is null!");
                 return;
             }
             
-            // Rigidbody 속도 초기화
-            if (playerRigidbody != null)
-            {
-                playerRigidbody.velocity = Vector3.zero;
-                playerRigidbody.angularVelocity = Vector3.zero;
-            }
-            
-            // 위치 설정
-            player.transform.position = position;
+            // AutoHandPlayer의 내장 텔레포트 함수 사용
+            autoHandPlayer.SetPosition(position);
             
             Debug.Log($"Player teleported to: {position}");
         }
         
+        /// <summary>
+        /// 플레이어 텔레포트 (위치 + 회전)
+        /// </summary>
+        public void TeleportPlayer(Vector3 position, float yRotation)
+        {
+            if (autoHandPlayer == null)
+            {
+                Debug.LogError("AutoHandPlayer reference is null!");
+                return;
+            }
+            
+            // AutoHandPlayer의 내장 텔레포트 함수 사용 (위치 + 회전)
+            Quaternion rotation = Quaternion.Euler(0f, yRotation, 0f);
+            autoHandPlayer.SetPosition(position, rotation);
+            
+            Debug.Log($"Player teleported to: {position}, rotation: {yRotation}°");
+        }
+        
+        /// <summary>
+        /// 챕터 시작 위치로 플레이어 텔레포트
+        /// </summary>
+        public void TeleportPlayerToChapterStart(int chapterIndex)
+        {
+            Debug.Log($"=== TeleportPlayerToChapterStart called for Chapter {chapterIndex + 1} ===");
+            
+            if (autoHandPlayer == null)
+            {
+                Debug.LogError("AutoHandPlayer is not assigned in PlayerManager!");
+                return;
+            }
+            
+            if (chapterIndex < 0 || chapterIndex >= chapterStartTransforms.Length)
+            {
+                Debug.LogError($"Invalid chapter index: {chapterIndex} (array length: {chapterStartTransforms.Length})");
+                return;
+            }
+            
+            Transform startTransform = chapterStartTransforms[chapterIndex];
+            
+            if (startTransform == null)
+            {
+                Debug.LogError($"Chapter {chapterIndex + 1} start transform is not assigned in PlayerManager inspector!");
+                Debug.LogError($"Please assign a Transform to Chapter Start Transforms[{chapterIndex}]");
+                return;
+            }
+            
+            Vector3 startPosition = startTransform.position;
+            float startRotation = startTransform.eulerAngles.y;
+            
+            Debug.Log($"Teleporting to: {startTransform.name}");
+            Debug.Log($"  Position: {startPosition}");
+            Debug.Log($"  Rotation: {startRotation}°");
+            Debug.Log($"  Current Player Position: {autoHandPlayer.transform.position}");
+            
+            TeleportPlayer(startPosition, startRotation);
+            
+            Debug.Log($"Player teleported successfully to Chapter {chapterIndex + 1}");
+            Debug.Log($"  New Player Position: {autoHandPlayer.transform.position}");
+        }
+        
+        
+        /// <summary>
+        /// AutoHandPlayer 인스턴스 가져오기 (DOTween 이동용)
+        /// </summary>
+        public Autohand.AutoHandPlayer GetAutoHandPlayer()
+        {
+            return autoHandPlayer;
+        }
+        
+        /// <summary>
+        /// 플레이어 제어 활성화 상태 확인
+        /// </summary>
+        public bool IsPlayerControlEnabled()
+        {
+            return isControllerEnabled;
+        }
         
         /// <summary>
         /// 현재 플레이어 상태 반환
@@ -310,10 +389,86 @@ namespace TheFeelies.Managers
             Debug.Log($"Haptics {(enabled ? "enabled" : "disabled")}");
         }
         
-        /// <summary>
-        /// 햅틱 활성화 상태 반환
-        /// </summary>
-        public bool IsHapticsEnabled => enableHaptics;
+    /// <summary>
+    /// 햅틱 활성화 상태 반환
+    /// </summary>
+    public bool IsHapticsEnabled => enableHaptics;
+    
+    // ===== VR 카메라 뷰 전환 시스템 =====
+    
+    /// <summary>
+    /// 3인칭 뷰로 전환 (CutEvent에서 호출 가능)
+    /// </summary>
+    public void SetThirdPersonView()
+    {
+        if (vrCameraViewSwitcher == null)
+        {
+            Debug.LogError("VRCameraViewSwitcher is not assigned in PlayerManager!");
+            return;
+        }
         
+        vrCameraViewSwitcher.SetThirdPersonView();
+        Debug.Log("PlayerManager: Switched to third person view");
     }
+    
+    /// <summary>
+    /// 1인칭 뷰로 전환 (CutEvent에서 호출 가능)
+    /// </summary>
+    public void SetFirstPersonView()
+    {
+        if (vrCameraViewSwitcher == null)
+        {
+            Debug.LogError("VRCameraViewSwitcher is not assigned in PlayerManager!");
+            return;
+        }
+        
+        vrCameraViewSwitcher.SetFirstPersonView();
+        Debug.Log("PlayerManager: Switched to first person view");
+    }
+    
+    /// <summary>
+    /// 1인칭/3인칭 뷰 토글 (CutEvent에서 호출 가능)
+    /// </summary>
+    public void ToggleCameraView()
+    {
+        if (vrCameraViewSwitcher == null)
+        {
+            Debug.LogError("VRCameraViewSwitcher is not assigned in PlayerManager!");
+            return;
+        }
+        
+        vrCameraViewSwitcher.ToggleView();
+        Debug.Log($"PlayerManager: Toggled camera view to {(vrCameraViewSwitcher.IsThirdPerson() ? "third person" : "first person")}");
+    }
+    
+    /// <summary>
+    /// 현재 3인칭 뷰인지 확인
+    /// </summary>
+    public bool IsThirdPersonView()
+    {
+        if (vrCameraViewSwitcher == null)
+        {
+            Debug.LogWarning("VRCameraViewSwitcher is not assigned in PlayerManager!");
+            return false;
+        }
+        
+        return vrCameraViewSwitcher.IsThirdPerson();
+    }
+    
+    /// <summary>
+    /// 3인칭 카메라 오프셋 설정 (런타임에서 조정 가능)
+    /// </summary>
+    public void SetThirdPersonCameraOffset(Vector3 offset)
+    {
+        if (vrCameraViewSwitcher == null)
+        {
+            Debug.LogError("VRCameraViewSwitcher is not assigned in PlayerManager!");
+            return;
+        }
+        
+        vrCameraViewSwitcher.SetThirdPersonOffset(offset);
+        Debug.Log($"PlayerManager: Third person camera offset set to {offset}");
+    }
+    
+}
 } 

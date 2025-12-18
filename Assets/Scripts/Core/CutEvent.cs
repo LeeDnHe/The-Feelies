@@ -43,6 +43,10 @@ namespace TheFeelies.Core
         [SerializeField] private Vector3 teleportPosition = Vector3.zero;
         [SerializeField] private bool shouldTeleport = false;
         
+        [Header("DOTween Path Mover Events")]
+        [SerializeField] private PlayerDotweenMover playerDotweenMover;
+        [SerializeField] private DotweenPathMover dotweenPathMover;
+        
         public string EventName => eventName;
         public float Delay => delay;
         public float WaitAfterExecution => waitAfterExecution;
@@ -87,6 +91,14 @@ namespace TheFeelies.Core
                     
                 case CutEventType.PlayerControl:
                     ExecutePlayerControl();
+                    break;
+                    
+                case CutEventType.PlayPlayerDotweenPath:
+                    ExecutePlayPlayerDotweenPath();
+                    break;
+                    
+                case CutEventType.PlayDotweenPath:
+                    ExecutePlayDotweenPath();
                     break;
                     
                 default:
@@ -263,6 +275,30 @@ namespace TheFeelies.Core
             
             PlayerManager.Instance.SetPlayerControlEnabled(enablePlayerControl);
         }
+        
+        private void ExecutePlayPlayerDotweenPath()
+        {
+            if (playerDotweenMover == null)
+            {
+                Debug.LogError("PlayerDotweenMover is not set!");
+                return;
+            }
+            
+            playerDotweenMover.PlayPath();
+            Debug.Log($"Player DOTween path started: {eventName}");
+        }
+        
+        private void ExecutePlayDotweenPath()
+        {
+            if (dotweenPathMover == null)
+            {
+                Debug.LogError("DotweenPathMover is not set!");
+                return;
+            }
+            
+            dotweenPathMover.PlayPath();
+            Debug.Log($"DOTween path started: {eventName}");
+        }
     }
     
     /// <summary>
@@ -277,7 +313,9 @@ namespace TheFeelies.Core
         TeleportPlayer,         // 플레이어 텔레포트
         ChangeBackgroundMusic,  // 배경음악 변경
         ChangeScene,            // 씬 변경
-        PlayerControl           // 플레이어 제어 (컨트롤러 + 이동)
+        PlayerControl,          // 플레이어 제어 (컨트롤러 + 이동)
+        PlayPlayerDotweenPath,  // 플레이어 DOTween 경로 이동
+        PlayDotweenPath         // 일반 오브젝트 DOTween 경로 이동
     }
     
     /// <summary>
