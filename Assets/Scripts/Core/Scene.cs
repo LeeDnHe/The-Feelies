@@ -136,8 +136,6 @@ namespace TheFeelies.Core
                 // 챕터 전환 시 페이드 아웃 및 플레이어 위치 조정
                 if (useChapterFade && !isFirstChapter)
                 {
-                    // 페이드 아웃 시작 (2번째 챕터부터)
-                    Debug.Log($"Starting fade out for chapter transition");
                     FadeOut?.Invoke(fadeOutDuration);
                     yield return new WaitForSeconds(fadeOutDuration);
                 }
@@ -146,7 +144,6 @@ namespace TheFeelies.Core
                 if (Managers.PlayerManager.Instance != null)
                 {
                     Managers.PlayerManager.Instance.TeleportPlayerToChapterStart(currentChapterIndex);
-                    Debug.Log($"Player teleported to Chapter {currentChapterIndex + 1} start position");
                 }
                 
                 // 멀티 씬 모드: 씬 로드 후 Chapter 컴포넌트 찾기
@@ -188,12 +185,11 @@ namespace TheFeelies.Core
                     }
                 }
                 
-                Debug.Log($"Starting Chapter {currentChapterIndex + 1}: {currentChapter.ChapterName}");
+                Debug.Log($"[Scene] Starting Chapter {currentChapterIndex + 1}: {currentChapter.ChapterName}");
                 
                 // 페이드 인 (챕터 시작 시)
                 if (useChapterFade)
                 {
-                    Debug.Log($"Starting fade in for chapter {currentChapterIndex + 1}");
                     FadeIn?.Invoke(fadeInDuration);
                     yield return new WaitForSeconds(fadeInDuration);
                 }
@@ -203,8 +199,6 @@ namespace TheFeelies.Core
                 
                 // 챕터가 완료될 때까지 대기
                 yield return new WaitUntil(() => !currentChapter.IsPlaying);
-                
-                Debug.Log($"Chapter {currentChapterIndex + 1} completed");
                 
                 // 멀티 씬 모드: 챕터 씬 언로드
                 if (useMultiSceneLoading && currentLoadedChapterScene.IsValid())
@@ -220,7 +214,7 @@ namespace TheFeelies.Core
             // 모든 챕터 완료
             if (isPlaying)
             {
-                Debug.Log($"Scene completed: {sceneName}");
+                Debug.Log($"[Scene] Completed: {sceneName}");
                 isPlaying = false;
                 onSceneComplete?.Invoke();
             }
@@ -240,7 +234,6 @@ namespace TheFeelies.Core
                 Chapter chapter = rootObject.GetComponentInChildren<Chapter>();
                 if (chapter != null)
                 {
-                    Debug.Log($"Found Chapter component: {chapter.ChapterName}");
                     return chapter;
                 }
             }
@@ -253,8 +246,6 @@ namespace TheFeelies.Core
         /// </summary>
         private IEnumerator LoadChapterScene(string chapterSceneName)
         {
-            Debug.Log($"Loading chapter scene: {chapterSceneName}");
-            
             AsyncOperation asyncLoad = SceneManager.LoadSceneAsync(chapterSceneName, LoadSceneMode.Additive);
             
             while (!asyncLoad.isDone)
@@ -267,7 +258,6 @@ namespace TheFeelies.Core
             if (currentLoadedChapterScene.IsValid())
             {
                 SceneManager.SetActiveScene(currentLoadedChapterScene);
-                Debug.Log($"Chapter scene loaded and set as active: {chapterSceneName}");
             }
             else
             {
@@ -286,7 +276,6 @@ namespace TheFeelies.Core
             }
             
             string sceneName = currentLoadedChapterScene.name;
-            Debug.Log($"Unloading chapter scene: {sceneName}");
             
             AsyncOperation asyncUnload = SceneManager.UnloadSceneAsync(currentLoadedChapterScene);
             
@@ -294,8 +283,6 @@ namespace TheFeelies.Core
             {
                 yield return null;
             }
-            
-            Debug.Log($"Chapter scene unloaded: {sceneName}");
             
             // 가비지 컬렉션으로 메모리 정리
             yield return Resources.UnloadUnusedAssets();

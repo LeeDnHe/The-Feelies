@@ -2081,7 +2081,7 @@ CharacterController:
   m_LayerOverridePriority: 0
   m_IsTrigger: 0
   m_ProvidesContacts: 0
-  m_Enabled: 1
+  m_Enabled: 0
   serializedVersion: 3
   m_Height: 1.8
   m_Radius: 0.1
@@ -2114,16 +2114,16 @@ MonoBehaviour:
   JumpTimeout: 0.5
   FallTimeout: 0.15
   Grounded: 1
-  GroundedOffset: -0.14
-  GroundedRadius: 0.28
+  GroundedOffset: 0.5
+  GroundedRadius: 0.5
   GroundLayers:
     serializedVersion: 2
     m_Bits: 1
-  CinemachineCameraTarget: {fileID: 0}
+  CinemachineCameraTarget: {fileID: 1569692452}
   TopClamp: 70
   BottomClamp: -30
   CameraAngleOverride: 0
-  LockCameraPosition: 0
+  LockCameraPosition: 1
 --- !u!114 &341883592
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -7571,6 +7571,37 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
+--- !u!1 &1569692452
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1569692453}
+  m_Layer: 0
+  m_Name: ThirdCameraRoot
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1569692453
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1569692452}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 1.5, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 7942002212218242477}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!136 &1586606998
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -29357,6 +29388,7 @@ Transform:
   m_Children:
   - {fileID: 7942002210873346570}
   - {fileID: 6707951068874034737}
+  - {fileID: 1569692453}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: -90, z: 0}
 --- !u!1 &7942002212314556954
@@ -29704,6 +29736,7 @@ MonoBehaviour:
   stopDistance: 0.5
   loopPath: 0
   sprint: 0
+  useCameraRelativeInput: 0
 --- !u!1 &8142330656672044268
 GameObject:
   m_ObjectHideFlags: 0

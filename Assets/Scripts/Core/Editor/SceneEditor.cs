@@ -63,9 +63,18 @@ namespace TheFeelies.Core.Editor
             {
                 EditorGUILayout.Space(10);
                 DrawRuntimeInfo();
+                
+                EditorGUILayout.Space(10);
+                DrawSceneTester();
             }
             
             serializedObject.ApplyModifiedProperties();
+
+            // 실시간 갱신을 위해 Repaint 호출 (플레이 중에만)
+            if (Application.isPlaying)
+            {
+                Repaint();
+            }
         }
         
         private void DrawMultiSceneMode()
@@ -195,6 +204,71 @@ namespace TheFeelies.Core.Editor
                     sceneComponent.SkipToNextChapter();
                 }
             }
+        }
+
+        private void DrawSceneTester()
+        {
+            Scene scene = (Scene)target;
+            if (!scene.IsPlaying) return;
+
+            EditorGUILayout.LabelField("Scene Tester", EditorStyles.boldLabel);
+            EditorGUILayout.BeginVertical("box");
+
+            // 1. 현재 상태 정보 표시
+            var chapter = scene.CurrentChapter;
+            var act = chapter != null ? chapter.CurrentAct : null;
+            var cut = act != null ? act.CurrentCut : null;
+            var currentEvent = cut != null ? cut.CurrentEvent : null;
+
+            DrawStatusLabel("Current Chapter", chapter != null ? chapter.ChapterName : "None");
+            DrawStatusLabel("Current Act", act != null ? act.ActName : "None");
+            DrawStatusLabel("Current Cut", cut != null ? cut.CutName : "None");
+            
+            string eventName = currentEvent != null ? currentEvent.EventName : "None";
+            if (cut != null && cut.IsWaitingBeforeStart) eventName = "Waiting (Before Start)";
+            else if (cut != null && cut.IsWaitingBeforeEnd) eventName = "Waiting (Before End)";
+            
+            DrawStatusLabel("Current Event", eventName);
+
+            string status = "Running";
+            if (cut != null)
+            {
+                if (cut.IsWaitingBeforeStart) status = "Waiting for Input (Start)";
+                else if (cut.IsWaitingBeforeEnd) status = "Waiting for Input (End)";
+                else if (currentEvent != null && currentEvent.Delay > 0) status = "Waiting (Delay)";
+                else if (currentEvent != null && currentEvent.WaitAfterExecution > 0) status = "Waiting (Post-Exec)";
+            }
+            DrawStatusLabel("Status", status);
+
+            EditorGUILayout.Space(5);
+
+            // 2. 컨트롤 (버튼 & 단축키)
+            if (cut != null)
+            {
+                string buttonLabel = "Next Event (Space)";
+                if (GUILayout.Button(buttonLabel, GUILayout.Height(30)))
+                {
+                    cut.SkipCurrentWait();
+                }
+
+                // 스페이스바 단축키 처리
+                Event e = Event.current;
+                if (e != null && e.type == EventType.KeyDown && e.keyCode == KeyCode.Space)
+                {
+                    cut.SkipCurrentWait();
+                    e.Use(); // 이벤트 소비
+                }
+            }
+
+            EditorGUILayout.EndVertical();
+        }
+
+        private void DrawStatusLabel(string label, string value)
+        {
+            EditorGUILayout.BeginHorizontal();
+            EditorGUILayout.LabelField(label, GUILayout.Width(120));
+            EditorGUILayout.LabelField(value, EditorStyles.boldLabel);
+            EditorGUILayout.EndHorizontal();
         }
     }
 }

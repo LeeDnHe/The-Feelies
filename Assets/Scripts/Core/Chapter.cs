@@ -58,7 +58,7 @@ namespace TheFeelies.Core
             isPlaying = true;
             currentActIndex = 0;
             
-            Debug.Log($"Starting Chapter: {chapterName}");
+            Debug.Log($"[Chapter] Starting: {chapterName}");
             onChapterStart?.Invoke();
             
             StartCoroutine(PlayChapterCoroutine());
@@ -80,7 +80,7 @@ namespace TheFeelies.Core
                 CurrentAct.StopAct();
             }
             
-            Debug.Log($"Stopping Chapter: {chapterName}");
+            Debug.Log($"[Chapter] Stopping: {chapterName}");
         }
         
         /// <summary>
@@ -121,7 +121,7 @@ namespace TheFeelies.Core
                     continue;
                 }
                 
-                Debug.Log($"Starting Act {currentActIndex + 1}: {currentAct.ActName}");
+                Debug.Log($"[Chapter] Starting Act {currentActIndex + 1}: {currentAct.ActName}");
                 
                 // 액트 시작
                 currentAct.StartAct();
@@ -129,15 +129,13 @@ namespace TheFeelies.Core
                 // 액트가 완료될 때까지 대기
                 yield return new WaitUntil(() => !currentAct.IsPlaying);
                 
-                Debug.Log($"Act {currentActIndex + 1} completed in chapter: {chapterName}");
-                
                 currentActIndex++;
             }
             
             // 모든 액트 완료
             if (isPlaying)
             {
-                Debug.Log($"Chapter completed: {chapterName}");
+                Debug.Log($"[Chapter] Completed: {chapterName}");
                 isPlaying = false;
                 onChapterComplete?.Invoke();
             }

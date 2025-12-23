@@ -26,7 +26,8 @@ namespace TheFeelies.Core
     private bool isPlaying = false;
     private bool isWaitingBeforeStart = false;
     private bool isWaitingBeforeEnd = false;
-    
+    private bool skipRequested = false; // 스킵 요청 플래그
+
     public string CutName => cutName;
     public float CutDuration => cutDuration;
     public bool WaitBeforeStart => waitBeforeStart;
@@ -34,7 +35,8 @@ namespace TheFeelies.Core
     public bool IsPlaying => isPlaying;
     public bool IsWaitingBeforeStart => isWaitingBeforeStart;
     public bool IsWaitingBeforeEnd => isWaitingBeforeEnd;
-        
+    public CutEvent CurrentEvent { get; private set; } // 현재 실행 중인 이벤트
+
         private void Start()
         {
             // 자동 시작은 하지 않음 - Act에서 제어
@@ -56,7 +58,7 @@ namespace TheFeelies.Core
         // isWaitingBeforeEnd는 여기서 초기화
         isWaitingBeforeEnd = false;
         
-        Debug.Log($"Starting Cut: {cutName}");
+        Debug.Log($"[Cut] Starting: {cutName}");
         
         StartCoroutine(PlayCutCoroutine());
     }
@@ -73,7 +75,7 @@ namespace TheFeelies.Core
         isWaitingBeforeEnd = false;
         StopAllCoroutines();
         
-        Debug.Log($"Stopping Cut: {cutName}");
+        Debug.Log($"[Cut] Stopping: {cutName}");
     }
         
         /// <summary>
@@ -102,7 +104,6 @@ namespace TheFeelies.Core
         if (waitBeforeStart && isWaitingBeforeStart)
         {
             isWaitingBeforeStart = false;
-            Debug.Log($"Player input received, resuming cut: {cutName}");
             return;
         }
         
@@ -113,12 +114,10 @@ namespace TheFeelies.Core
             if (waitBeforeStart)
             {
                 isWaitingBeforeStart = true;
-                Debug.Log($"Cut {cutName} starting in wait mode");
             }
             else
             {
                 isWaitingBeforeStart = false;
-                Debug.Log($"Cut {cutName} starting immediately");
             }
             
             // 컷 시작
@@ -134,7 +133,6 @@ namespace TheFeelies.Core
         if (isWaitingBeforeEnd)
         {
             isWaitingBeforeEnd = false;
-            Debug.Log($"Player input before end received for cut: {cutName}");
         }
     }
     
@@ -146,86 +144,119 @@ namespace TheFeelies.Core
         OnPlayerInputBeforeStart();
         OnPlayerInputBeforeEnd();
     }
+
+    /// <summary>
+    /// 현재 진행 중인 대기(이벤트 딜레이 등)를 건너뛰기
+    /// </summary>
+    public void SkipCurrentWait()
+    {
+        if (isPlaying)
+        {
+            // 대기 상태라면 입력 처리
+            if (isWaitingBeforeStart)
+            {
+                OnPlayerInputBeforeStart();
+                return;
+            }
+            if (isWaitingBeforeEnd)
+            {
+                OnPlayerInputBeforeEnd();
+                return;
+            }
+
+            // 이벤트 실행 중 대기(딜레이)라면 스킵 플래그 설정
+            skipRequested = true;
+            Debug.Log($"[Cut] Skip requested: {cutName}");
+        }
+    }
         
     private IEnumerator PlayCutCoroutine()
     {
         // 1. 시작 전 플레이어 입력 대기
         if (waitBeforeStart && isWaitingBeforeStart)
         {
-            Debug.Log($"Waiting for player input before start in cut: {cutName}");
             yield return new WaitUntil(() => !isWaitingBeforeStart);
         }
             
             // 2. 시작 이벤트 실행
-            Debug.Log($"Executing start events for cut: {cutName}");
             yield return StartCoroutine(ExecuteEvents(startEvents));
             
             // 3. 중간 이벤트 실행
             if (middleEvents.Count > 0)
             {
-                Debug.Log($"Executing middle events for cut: {cutName}");
                 yield return StartCoroutine(ExecuteEvents(middleEvents));
             }
             
             // 4. 지속 시간 대기
             if (cutDuration > 0)
             {
-                Debug.Log($"Waiting {cutDuration} seconds in cut: {cutName}");
-                yield return new WaitForSeconds(cutDuration);
+                yield return StartCoroutine(WaitForSecondsOrSkip(cutDuration));
             }
             
         // 5. 종료 전 플레이어 입력 대기
         if (waitBeforeEnd)
         {
             isWaitingBeforeEnd = true;
-            Debug.Log($"Waiting for player input before end in cut: {cutName}");
             yield return new WaitUntil(() => !isWaitingBeforeEnd);
         }
             
             // 6. 종료 이벤트 실행
-            Debug.Log($"Executing end events for cut: {cutName}");
             yield return StartCoroutine(ExecuteEvents(endEvents));
             
             // 7. 컷 완료
-            Debug.Log($"Cut completed: {cutName}");
             isPlaying = false;
         }
         
         private IEnumerator ExecuteEvents(List<CutEvent> events)
         {
-            Debug.Log($"ExecuteEvents called with {events.Count} events");
-            
             foreach (var cutEvent in events)
             {
                 if (cutEvent == null) 
                 {
-                    Debug.LogWarning("Null cutEvent found in events list, skipping...");
                     continue;
                 }
                 
-                Debug.Log($"Executing event: {cutEvent.EventName} (Type: {cutEvent.EventType}, Delay: {cutEvent.Delay})");
+                CurrentEvent = cutEvent; // 현재 이벤트 업데이트
                 
                 // 지연 시간 대기
                 if (cutEvent.Delay > 0)
                 {
-                    Debug.Log($"Waiting {cutEvent.Delay} seconds before executing event: {cutEvent.EventName}");
-                    yield return new WaitForSeconds(cutEvent.Delay);
+                    yield return StartCoroutine(WaitForSecondsOrSkip(cutEvent.Delay));
                 }
                 
                 // 이벤트 실행
-                Debug.Log($"About to execute event: {cutEvent.EventName}");
                 cutEvent.ExecuteEvent();
-                Debug.Log($"Event execution completed: {cutEvent.EventName}");
                 
                 // 이벤트 간 추가 대기 시간 (필요한 경우)
                 if (cutEvent.WaitAfterExecution > 0)
                 {
-                    Debug.Log($"Waiting {cutEvent.WaitAfterExecution} seconds after executing event: {cutEvent.EventName}");
-                    yield return new WaitForSeconds(cutEvent.WaitAfterExecution);
+                    yield return StartCoroutine(WaitForSecondsOrSkip(cutEvent.WaitAfterExecution));
                 }
             }
             
-            Debug.Log("All events in ExecuteEvents completed");
+            CurrentEvent = null; // 이벤트 목록 종료 시 초기화
+        }
+
+        /// <summary>
+        /// 지정된 시간 동안 대기하거나 스킵 요청이 있으면 즉시 종료
+        /// </summary>
+        private IEnumerator WaitForSecondsOrSkip(float duration)
+        {
+            float timer = 0f;
+            skipRequested = false;
+
+            while (timer < duration)
+            {
+                if (skipRequested)
+                {
+                    skipRequested = false;
+                    Debug.Log("[Cut] Wait skipped!");
+                    yield break;
+                }
+
+                timer += Time.deltaTime;
+                yield return null;
+            }
         }
         
         /// <summary>

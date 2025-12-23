@@ -95,11 +95,11 @@ public class VRCameraViewSwitcher : MonoBehaviour
         Vector3 offsetFromCamera = targetPosition - vrCamera.transform.position;
         trackingContainer.position += offsetFromCamera;
         
-        // 디버그 로그로 추적 확인
-        if (Time.frameCount % 60 == 0) // 1초에 한 번씩만 출력
-        {
-            Debug.Log($"[3인칭] 플레이어: {playerBody.position}, 목표: {targetPosition}, 카메라: {vrCamera.transform.position}, TrackingContainer: {trackingContainer.position}");
-        }
+        // 디버그 로그로 추적 확인 (삭제)
+        // if (Time.frameCount % 60 == 0) // 1초에 한 번씩만 출력
+        // {
+        //    Debug.Log($"[3인칭] 플레이어: {playerBody.position}, 목표: {targetPosition}, 카메라: {vrCamera.transform.position}, TrackingContainer: {trackingContainer.position}");
+        // }
         
         // 플레이어를 바라보도록 (한 번만)
         if (!hasLookedAtPlayer)

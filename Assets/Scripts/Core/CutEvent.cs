@@ -57,8 +57,6 @@ namespace TheFeelies.Core
         /// </summary>
         public void ExecuteEvent()
         {
-            Debug.Log($"Executing CutEvent: {eventName} (Type: {eventType})");
-            
             switch (eventType)
             {
                 case CutEventType.UnityEvent:
@@ -109,13 +107,9 @@ namespace TheFeelies.Core
         
         private void ExecuteUnityEvent()
         {
-            Debug.Log($"Executing UnityEvent for: {eventName}");
-            Debug.Log($"UnityEvent has {onEventExecute?.GetPersistentEventCount() ?? 0} listeners");
-            
             if (onEventExecute != null)
             {
                 onEventExecute.Invoke();
-                Debug.Log($"UnityEvent executed successfully for: {eventName}");
             }
             else
             {
@@ -155,7 +149,6 @@ namespace TheFeelies.Core
                     {
                         method.Invoke(manager, null);
                     }
-                    Debug.Log($"Manager method '{managerMethodName}' executed on {manager.GetType().Name}");
                     return;
                 }
             }
@@ -185,7 +178,6 @@ namespace TheFeelies.Core
             }
             
             AnimationManager.Instance.PlayCharacterAnimation(targetActorId, animationClip);
-            Debug.Log($"Animation played via AnimationManager: {animationClip.name} for actor: {targetActorId}");
         }
         
         private void ExecutePlayAudio()
@@ -206,17 +198,14 @@ namespace TheFeelies.Core
             {
                 case AudioPlayType.Dialog:
                     SoundManager.Instance.PlayDialog(audioClip);
-                    Debug.Log($"대화 재생: {audioClip.name}");
                     break;
                     
                 case AudioPlayType.BackgroundMusic:
                     SoundManager.Instance.PlayMusic(audioClip);
-                    Debug.Log($"배경음악 재생: {audioClip.name}");
                     break;
                     
                 case AudioPlayType.SFX:
                     SoundManager.Instance.PlaySFX(audioClip, loopAudio);
-                    Debug.Log($"효과음 재생: {audioClip.name} (Loop: {loopAudio})");
                     break;
                     
                 default:

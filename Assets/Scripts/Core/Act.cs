@@ -60,7 +60,7 @@ namespace TheFeelies.Core
             isPlaying = true;
             currentCutIndex = 0;
             
-            Debug.Log($"Starting Act: {actName}");
+            Debug.Log($"[Act] Starting: {actName}");
             onActStart?.Invoke();
             
             StartCoroutine(PlayActCoroutine());
@@ -82,7 +82,7 @@ namespace TheFeelies.Core
                 CurrentCut.StopCut();
             }
             
-            Debug.Log($"Stopping Act: {actName}");
+            Debug.Log($"[Act] Stopping: {actName}");
         }
         
         /// <summary>
@@ -123,15 +123,13 @@ namespace TheFeelies.Core
                     continue;
                 }
                 
-            Debug.Log($"Starting Cut {currentCutIndex + 1}: {currentCut.CutName}");
+                Debug.Log($"[Act] Starting Cut {currentCutIndex + 1}: {currentCut.CutName}");
             
-            // 컷 시작 (waitBeforeStart가 false면 즉시, true면 대기 상태로)
-            currentCut.OnPlayerInputBeforeStart();
+                // 컷 시작 (waitBeforeStart가 false면 즉시, true면 대기 상태로)
+                currentCut.OnPlayerInputBeforeStart();
             
-            // 컷이 완료될 때까지 대기
-            yield return new WaitUntil(() => !currentCut.IsPlaying);
-                
-                Debug.Log($"Cut {currentCutIndex + 1} completed in act: {actName}");
+                // 컷이 완료될 때까지 대기
+                yield return new WaitUntil(() => !currentCut.IsPlaying);
                 
                 currentCutIndex++;
             }
@@ -139,7 +137,7 @@ namespace TheFeelies.Core
             // 모든 컷 완료
             if (isPlaying)
             {
-                Debug.Log($"Act completed: {actName}");
+                Debug.Log($"[Act] Completed: {actName}");
                 isPlaying = false;
                 onActComplete?.Invoke();
             }
