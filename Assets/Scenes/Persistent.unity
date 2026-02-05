@@ -29751,12 +29751,16 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1ed5635bf9acfdf4ab9e3cbac60f1417, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  enableDebugLogs: 1
+  debugLogIntervalSeconds: 0.5
+  drawDebugRay: 0
   gazeCamera: {fileID: 7942002211039413953}
   maxDistance: 20
   layerMask:
     serializedVersion: 2
-    m_Bits: 1024
+    m_Bits: 3072
   queryTriggerInteraction: 1
+  useRigidbodyOrRootAsTarget: 1
   requiredGazeSeconds: 2
 --- !u!1 &8142330656672044268
 GameObject:
