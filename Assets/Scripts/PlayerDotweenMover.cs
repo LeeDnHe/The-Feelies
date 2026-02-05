@@ -242,12 +242,9 @@ namespace TheFeelies.Core
                 })
                 .OnComplete(() => {
                     Debug.Log("PlayerDotweenMover: 플레이어 경로 이동 완료");
-                    
-                    // 물리 상태 복원
-                    if (playerRigidbody != null)
-                    {
-                        playerRigidbody.isKinematic = wasKinematic;
-                    }
+
+                    // NOTE: 실험 - 완료 시점에 Rigidbody kinematic 원복을 하지 않음 (사용자 요청)
+                    // 물리 상태 복원은 수행하지 않습니다.
 
                     // 플레이어 제어 복원
                     if (disablePlayerControlDuringMove)

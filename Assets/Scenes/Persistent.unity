@@ -8193,7 +8193,7 @@ MonoBehaviour:
   description: 
   useMultiSceneLoading: 1
   chapterSceneNames:
-  - Chapter01
+  - Chapter02
   chapters:
   - {fileID: 0}
   - {fileID: 0}
@@ -9411,7 +9411,7 @@ MonoBehaviour:
   isControllerFading: 0
   enableHaptics: 1
   chapterStartTransforms:
-  - {fileID: 989303189202481914, guid: a0cd1b36c0a5a404fa73024de286832f, type: 3}
+  - {fileID: 8778042205303649307, guid: a1e5053ab101d2d4bae85295ddba8e04, type: 3}
   - {fileID: 8778042205303649307, guid: a1e5053ab101d2d4bae85295ddba8e04, type: 3}
   - {fileID: 0}
   - {fileID: 0}
@@ -9421,6 +9421,7 @@ MonoBehaviour:
   - {fileID: 0}
   - {fileID: 0}
   - {fileID: 0}
+  trackerOffsetTransform: {fileID: 7942002210873346570}
 --- !u!1 &1996971646
 GameObject:
   m_ObjectHideFlags: 0
@@ -24766,6 +24767,7 @@ GameObject:
   - component: {fileID: 8086603478440793550}
   - component: {fileID: 8086603478440793551}
   - component: {fileID: 8086603478440793552}
+  - component: {fileID: 8086603478440793553}
   m_Layer: 0
   m_Name: AutoHandPlayer
   m_TagString: Untagged
@@ -28124,7 +28126,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 7942002210873346571}
   serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalRotation: {x: 0, y: -0.7071068, z: 0, w: 0.7071068}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -28136,7 +28138,7 @@ Transform:
   - {fileID: 5823117662419342813}
   - {fileID: 5823117661128572427}
   m_Father: {fileID: 7942002212218242477}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: -90, z: 0}
 --- !u!1 &7942002210873346571
 GameObject:
   m_ObjectHideFlags: 0
@@ -28326,7 +28328,7 @@ Camera:
   m_Depth: 0
   m_CullingMask:
     serializedVersion: 2
-    m_Bits: 983
+    m_Bits: 2007
   m_RenderingPath: -1
   m_TargetTexture: {fileID: 0}
   m_TargetDisplay: 0
@@ -29381,7 +29383,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 7942002212218242474}
   serializedVersion: 2
-  m_LocalRotation: {x: 0, y: -0.7071068, z: 0, w: 0.7071068}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 2, y: 2, z: 2}
   m_ConstrainProportionsScale: 0
@@ -29390,7 +29392,7 @@ Transform:
   - {fileID: 6707951068874034737}
   - {fileID: 1569692453}
   m_Father: {fileID: 0}
-  m_LocalEulerAnglesHint: {x: 0, y: -90, z: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &7942002212314556954
 GameObject:
   m_ObjectHideFlags: 0
@@ -29737,6 +29739,25 @@ MonoBehaviour:
   loopPath: 0
   sprint: 0
   useCameraRelativeInput: 0
+--- !u!114 &8086603478440793553
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6707951068874034748}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1ed5635bf9acfdf4ab9e3cbac60f1417, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  gazeCamera: {fileID: 7942002211039413953}
+  maxDistance: 20
+  layerMask:
+    serializedVersion: 2
+    m_Bits: 1024
+  queryTriggerInteraction: 1
+  requiredGazeSeconds: 2
 --- !u!1 &8142330656672044268
 GameObject:
   m_ObjectHideFlags: 0

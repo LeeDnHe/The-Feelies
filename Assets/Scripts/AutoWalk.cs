@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class AutoWalk : MonoBehaviour
 {
-    public float speed = 1.5f; // 걷는 속도 (여기서 조절 가능)
+    public float speed = 1.5f; 
 
     void Update()
     {

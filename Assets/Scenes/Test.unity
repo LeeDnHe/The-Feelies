@@ -14569,10 +14569,11 @@ MonoBehaviour:
   player: {fileID: 1016537613}
   playerBody: {fileID: 1016537610}
   vrCamera: {fileID: 1189621220}
+  playerModel: {fileID: 0}
+  autoPilot: {fileID: 0}
   thirdPersonOffset: {x: 0, y: 2, z: -3}
   transitionSpeed: 5
   smoothTransition: 1
-  lookAtPlayer: 0
   isThirdPerson: 0
 --- !u!1 &1025859796
 GameObject:

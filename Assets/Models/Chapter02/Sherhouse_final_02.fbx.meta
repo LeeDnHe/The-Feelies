@@ -3,7 +3,132 @@ guid: 60d685b6d02757e4b8334e812f278fb6
 ModelImporter:
   serializedVersion: 22200
   internalIDToNameTable: []
-  externalObjects: {}
+  externalObjects:
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Material.001
+    second: {fileID: 2100000, guid: c7fecffd2bf5f8440a8dfcb868b07eda, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Material.002
+    second: {fileID: 2100000, guid: d78b6e56d0fc6494fb2e804151bb0215, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Material.003
+    second: {fileID: 2100000, guid: 0124116ce8d48d44bb3abc6766a5a0e7, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Material.004
+    second: {fileID: 2100000, guid: fe11c5213ed6e0d418ac119940254c70, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Material.010
+    second: {fileID: 2100000, guid: b85c592b74c65f44497da900cda7cb1f, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Material.014
+    second: {fileID: 2100000, guid: 1389f1d0cf0d1684cac7999e56c31fd5, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Material.017
+    second: {fileID: 2100000, guid: 7358e7bf7185890499b02110a9536b1d, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Material.030
+    second: {fileID: 2100000, guid: adfeca7032b5b7145bf0ca618716ab77, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Material.031
+    second: {fileID: 2100000, guid: 5c9e784d55030374ca555e8ca688209e, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Material.034
+    second: {fileID: 2100000, guid: 3b7a871d2bc7430409cde35a81e64a44, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Wood
+    second: {fileID: 2100000, guid: 7ba065a0cea80ec48962f677c2d05381, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Wood Flooring
+    second: {fileID: 2100000, guid: f3a63243b2bdd4546a0f09f47ca4167c, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Wood floor tiles
+    second: {fileID: 2100000, guid: c9ff115031a8fee49b54bebc631222d7, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: carpet
+    second: {fileID: 2100000, guid: fd22cddcae51c8640b46c7a63136e38a, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: chair
+    second: {fileID: 2100000, guid: 07348ac8abdd0af43870cebaaecee33a, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: mainwall
+    second: {fileID: 2100000, guid: bb10fc9b63112c74786a112411916ff0, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: mainwall.002
+    second: {fileID: 2100000, guid: 4da107045285e0d4393efb07a9cbeb00, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: musicstand01
+    second: {fileID: 2100000, guid: d7a782cfb8ec4704faf2a726e268104b, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: musicstand02
+    second: {fileID: 2100000, guid: 9fa97e85be9e3a5449997a7d96feb622, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: sofa
+    second: {fileID: 2100000, guid: 046f50562bd7f97449abf9dfa192d9b7, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: sofa_alone
+    second: {fileID: 2100000, guid: 4423a397423aef246a6f622831dff737, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: sofa_alone_wood
+    second: {fileID: 2100000, guid: 6a0fd59735c651c49820efb064334b68, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: sofa_wood
+    second: {fileID: 2100000, guid: 20a648a88242cc141959eb1a24fe3b84, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: table
+    second: {fileID: 2100000, guid: b9dc5c9fd50e99f40b1284d9d7334e17, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: violin
+    second: {fileID: 2100000, guid: 1fcf1cf0c9eafdc4daacc10401c50ee1, type: 2}
   materials:
     materialImportMode: 2
     materialName: 0

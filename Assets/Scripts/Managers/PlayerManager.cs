@@ -34,6 +34,10 @@ namespace TheFeelies.Managers
         [Header("Chapter Start Positions")]
         [Tooltip("각 챕터의 시작 위치 Transform을 설정합니다. 빈 GameObject를 씬에 배치하고 등록하세요.")]
         [SerializeField] private Transform[] chapterStartTransforms = new Transform[10];
+
+        [Header("Tracker Offset (Rotation Override)")]
+        [Tooltip("회전(방향)은 AutoHandPlayer.SetPosition의 rotation 대신, 여기 할당된 TrackerOffset Transform의 로컬 회전을 직접 변경해서 적용합니다.")]
+        [SerializeField] private Transform trackerOffsetTransform;
         
         private static PlayerManager instance;
         public static PlayerManager Instance => instance;
@@ -45,6 +49,10 @@ namespace TheFeelies.Managers
         // 이동 관련 이벤트 관리자 (Non-MonoBehaviour)
         private PlayerMovementEvents _movementEvents = new PlayerMovementEvents();
         public PlayerMovementEvents MovementEvents => _movementEvents;
+
+        // 카메라 시선(레이캐스트) 감지 이벤트 관리자 (Non-MonoBehaviour)
+        private CameraGazeEvents _gazeEvents = new CameraGazeEvents();
+        public CameraGazeEvents GazeEvents => _gazeEvents;
         
         private void Awake()
         {
@@ -237,23 +245,42 @@ namespace TheFeelies.Managers
             
             Debug.Log($"Player teleported to: {position}");
         }
-        
+
         /// <summary>
-        /// 플레이어 텔레포트 (위치 + 회전)
+        /// 플레이어 텔레포트 (위치 + 회전 Quaternion)
         /// </summary>
-        public void TeleportPlayer(Vector3 position, float yRotation)
+        public void TeleportPlayer(Vector3 position, Quaternion rotation)
         {
             if (autoHandPlayer == null)
             {
                 Debug.LogError("AutoHandPlayer reference is null!");
                 return;
             }
-            
-            // AutoHandPlayer의 내장 텔레포트 함수 사용 (위치 + 회전)
+
+            // 위치는 AutoHandPlayer로 이동
+            autoHandPlayer.SetPosition(position);
+
+            // 회전은 사용자가 지정한 TrackerOffset Transform을 직접 회전
+            if (trackerOffsetTransform != null)
+            {
+                float yaw = rotation.eulerAngles.y;
+                trackerOffsetTransform.localRotation = Quaternion.Euler(0f, yaw, 0f);
+            }
+            else
+            {
+                Debug.LogWarning("trackerOffsetTransform is not assigned. Rotation will not be applied.");
+            }
+
+            Debug.Log($"Player teleported to: {position}, yaw: {rotation.eulerAngles.y}° (trackerOffsetTransform)");
+        }
+        
+        /// <summary>
+        /// 플레이어 텔레포트 (위치 + 회전)
+        /// </summary>
+        public void TeleportPlayer(Vector3 position, float yRotation)
+        {
             Quaternion rotation = Quaternion.Euler(0f, yRotation, 0f);
-            autoHandPlayer.SetPosition(position, rotation);
-            
-            Debug.Log($"Player teleported to: {position}, rotation: {yRotation}°");
+            TeleportPlayer(position, rotation);
         }
         
         /// <summary>
@@ -285,11 +312,11 @@ namespace TheFeelies.Managers
             }
             
             Vector3 startPosition = startTransform.position;
-            float startRotation = startTransform.eulerAngles.y;
+            Quaternion startRotation = startTransform.rotation;
             
             Debug.Log($"Teleporting to: {startTransform.name}");
             Debug.Log($"  Position: {startPosition}");
-            Debug.Log($"  Rotation: {startRotation}°");
+            Debug.Log($"  Rotation (Euler): {startRotation.eulerAngles}");
             Debug.Log($"  Current Player Position: {autoHandPlayer.transform.position}");
             
             TeleportPlayer(startPosition, startRotation);
